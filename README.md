@@ -6,7 +6,7 @@
 
 部署成功后用手机流量打开：
 
-**https://shujunye0625.github.io/foreign-language-tour-guideguide-/**
+**https://shujunye0625.github.io/foreign-language-tour-guide/**
 
 添加到主屏幕后，像 App 一样使用。
 

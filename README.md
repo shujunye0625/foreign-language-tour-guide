@@ -1,19 +1,26 @@
-# 导游英语影子跟读（手机 PWA）
+﻿# 导游英语影子跟读（手机 PWA）
 
 广东导游资格考试英语口试 · 100LS 影子跟读，专为通勤手机练习。
 
-**免费托管在 GitHub Pages，不需要自己买服务器。**
+部署成功后地址：
 
-## 用手机流量打开（GitHub Pages）
+`https://shujunye0625.github.io/foreign-language-tour-guideguide-/`
 
-部署成功后地址类似：
+## 推送到你的仓库（若尚未推送）
 
-`https://你的用户名.github.io/仓库名/`
+```powershell
+cd c:\Users\Administrator.DESKTOP-TSASORM\Desktop\tour
+git remote add origin https://github.com/shujunye0625/foreign-language-tour-guideguide-.git
+git push -u origin main
+```
 
-1. 用手机浏览器（流量或 WiFi）打开上面的链接  
-2. **添加到主屏幕**  
-3. 先把「丹霞问答」「欢迎辞」每句播放一遍（写入离线缓存）  
-4. 通勤时可离线听跟读；没缓存的句子需流量在线加载  
+（若已添加过 `origin`，跳过 `remote add`，直接 `git push -u origin main`。）
+
+推送时会弹出 GitHub 登录；用浏览器登录或 Personal Access Token 即可。
+
+然后：仓库 → **Settings** → **Pages** → Source 选 **GitHub Actions**。
+
+手机打开：`https://shujunye0625.github.io/foreign-language-tour-guideguide-/`
 
 ## 第一次发布到 GitHub（你只需做一次）
 
@@ -25,24 +32,19 @@ gh auth login
 
 ### 2. 在本项目目录创建仓库并推送
 
+本仓库已指向：`shujunye0625/foreign-language-tour-guideguide-`
+
 ```powershell
 cd c:\Users\Administrator.DESKTOP-TSASORM\Desktop\tour
-git init
-git add .
-git commit -m "Initial commit: guide English shadow reading PWA"
-gh repo create gd-guide-shadow --public --source=. --remote=origin --push
+git push -u origin main
 ```
-
-仓库名可改，例如 `gd-guide-shadow`。
 
 ### 3. 打开 GitHub Pages
 
 1. 打开仓库 → **Settings** → **Pages**  
 2. **Source** 选 **GitHub Actions**  
 3. 推送 `main` 后会自动跑工作流 `Deploy GitHub Pages`  
-4. 几分钟后在 Settings → Pages 看到访问地址  
-
-也可：仓库 → **Actions** 里手动点 **Run workflow**。
+4. 几分钟后访问：`https://shujunye0625.github.io/foreign-language-tour-guideguide-/`  
 
 ### 4. 手机验证
 

@@ -1,0 +1,13 @@
+# Dependencies / OS
+__pycache__/
+*.pyc
+.DS_Store
+Thumbs.db
+.env
+.venv/
+
+# Large local exam PDFs (keep on your PC, don't push)
+*.pdf
+
+# Optional local-only
+app/

@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover, maximum-scale=1, user-scalable=no" />
+  <meta name="theme-color" content="#0f172a" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+  <meta name="apple-mobile-web-app-title" content="影子跟读" />
+  <link rel="manifest" href="manifest.webmanifest" />
+  <link rel="apple-touch-icon" href="icons/icon-192.png" />
+  <title>导游英语影子跟读</title>
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+  <div id="app">
+    <section id="view-home" class="view active">
+      <header class="top">
+        <h1>影子跟读</h1>
+        <p class="sub">广东导游英语口试 · 通勤 100LS</p>
+      </header>
+      <div class="today-card">
+        <div class="today-row">
+          <span>今日过关</span>
+          <strong id="today-goal">0 / 20 句</strong>
+        </div>
+        <div class="bar"><i id="today-bar"></i></div>
+        <p class="hint">早高峰听跟 · 晚高峰录音过关</p>
+      </div>
+      <div class="module-grid" id="module-grid"></div>
+      <div class="home-actions">
+        <button type="button" class="btn ghost" id="btn-install-help">如何添加到主屏幕</button>
+        <button type="button" class="btn ghost" id="btn-weak">弱项词本</button>
+      </div>
+    </section>
+
+    <section id="view-player" class="view">
+      <header class="top compact">
+        <button type="button" class="icon-btn" id="btn-back" aria-label="返回">←</button>
+        <div class="top-mid">
+          <h2 id="player-title">练习</h2>
+          <p id="player-strategy" class="strategy"></p>
+        </div>
+        <button type="button" class="icon-btn" id="btn-toggle-zh" aria-label="中英切换">中</button>
+      </header>
+
+      <div class="progress-line">
+        <span id="pos-label">1 / 1</span>
+        <span id="ls-label">听 0 · 跟 0</span>
+      </div>
+      <div class="mode-banner" id="mode-banner"></div>
+
+      <article class="sentence-card">
+        <p class="q-label" id="q-label"></p>
+        <p class="en" id="en-text"></p>
+        <p class="zh" id="zh-text"></p>
+        <div class="focus" id="focus-words"></div>
+      </article>
+
+      <div class="score-panel hidden" id="score-panel">
+        <div class="score-num" id="score-num">—</div>
+        <p id="score-detail" class="hint"></p>
+        <div id="weak-list"></div>
+      </div>
+
+      <div class="transport">
+        <button type="button" class="ctrl" id="btn-prev" aria-label="上一句">⏮</button>
+        <button type="button" class="ctrl main" id="btn-play" aria-label="播放">▶</button>
+        <button type="button" class="ctrl" id="btn-next" aria-label="下一句">⏭</button>
+      </div>
+
+      <div class="toolbar">
+        <button type="button" class="chip" id="btn-loop">循环本句</button>
+        <button type="button" class="chip" id="btn-speed">1.0x</button>
+        <button type="button" class="chip" id="btn-listen">+听一遍</button>
+        <button type="button" class="chip" id="btn-shadow">+跟一遍</button>
+      </div>
+
+      <div class="record-row">
+        <button type="button" class="btn record" id="btn-record">🎤 跟读纠音</button>
+        <button type="button" class="btn pass" id="btn-pass">✓ 本句过关</button>
+      </div>
+      <p class="mic-hint" id="mic-hint">录音后用语音识别对比标准句，标出弱项词</p>
+    </section>
+
+    <section id="view-weak" class="view">
+      <header class="top compact">
+        <button type="button" class="icon-btn" id="btn-back-weak">←</button>
+        <h2>弱项词本</h2>
+        <button type="button" class="icon-btn" id="btn-clear-weak" title="清空">🗑</button>
+      </header>
+      <ul class="weak-ul" id="weak-ul"></ul>
+      <p class="empty" id="weak-empty">暂无弱项，多录音纠音后会出现在这里。</p>
+    </section>
+
+    <section id="view-install" class="view">
+      <header class="top compact">
+        <button type="button" class="icon-btn" id="btn-back-install">←</button>
+        <h2>添加到主屏幕</h2>
+        <span></span>
+      </header>
+      <div class="help-body">
+        <h3>iPhone / iPad（Safari）</h3>
+        <ol>
+          <li>用 Safari 打开本页</li>
+          <li>点底部分享按钮</li>
+          <li>选择「添加到主屏幕」</li>
+        </ol>
+        <h3>安卓（Chrome）</h3>
+        <ol>
+          <li>用 Chrome 打开本页</li>
+          <li>菜单 → 「安装应用」或「添加到主屏幕」</li>
+        </ol>
+        <p>添加后像普通 App 一样打开，地铁可离线练已缓存内容。</p>
+      </div>
+    </section>
+  </div>
+  <audio id="audio" preload="auto"></audio>
+  <script src="app.js" type="module"></script>
+</body>
+</html>

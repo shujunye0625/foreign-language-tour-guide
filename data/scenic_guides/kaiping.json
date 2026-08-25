@@ -1,0 +1,377 @@
+{
+  "id": "kaiping",
+  "titleZh": "开平碉楼",
+  "titleEn": "Kaiping Diaolou",
+  "blurb": "三大类 · 铭石楼 · 立园 · 修身立本",
+  "targetMinutes": 8,
+  "stops": [
+    {
+      "id": "stop-0",
+      "title": "### Opening",
+      "sceneHook": "### Opening",
+      "sentenceStart": 0,
+      "sentenceEnd": 2,
+      "mustSay": [
+        "defense, residence, Chinese–Western",
+        "communal, residential, watch",
+        "Mingshilou"
+      ]
+    },
+    {
+      "id": "stop-1",
+      "title": "Stop A: What are they — honors and numbers",
+      "sceneHook": "世遗解说牌",
+      "sentenceStart": 3,
+      "sentenceEnd": 5,
+      "mustSay": []
+    },
+    {
+      "id": "stop-2",
+      "title": "Stop B: Why build houses like fortresses?",
+      "sceneHook": "碉楼远景",
+      "sentenceStart": 6,
+      "sentenceEnd": 9,
+      "mustSay": []
+    },
+    {
+      "id": "stop-3",
+      "title": "Stop C: Three functional types",
+      "sceneHook": "三类碉楼示意图",
+      "sentenceStart": 10,
+      "sentenceEnd": 14,
+      "mustSay": []
+    },
+    {
+      "id": "stop-4",
+      "title": "Stop 1: Zili Village — Mingshilou, the finest",
+      "sceneHook": "自力村 · 铭石楼前",
+      "sentenceStart": 15,
+      "sentenceEnd": 17,
+      "mustSay": []
+    },
+    {
+      "id": "stop-5",
+      "title": "Stop 2: Ruishilou and Fangshi Denglou",
+      "sceneHook": "瑞石楼 / 方氏灯楼",
+      "sentenceStart": 18,
+      "sentenceEnd": 19,
+      "mustSay": []
+    },
+    {
+      "id": "stop-6",
+      "title": "Stop 3: Li Garden — name, layout, and East meets West",
+      "sceneHook": "立园拱门",
+      "sentenceStart": 20,
+      "sentenceEnd": 27,
+      "mustSay": []
+    },
+    {
+      "id": "stop-7",
+      "title": "Closing",
+      "sceneHook": "村落出口",
+      "sentenceStart": 28,
+      "sentenceEnd": 30,
+      "mustSay": [
+        "Xiu Shen Li Ben",
+        "3,300 / 1,833 / 20"
+      ]
+    }
+  ],
+  "sentences": [
+    {
+      "id": "kaiping-s01",
+      "en": "Hello, everyone.",
+      "zh": "大家好。",
+      "stopId": "stop-0",
+      "focusPhrases": [
+        "Kaiping Diaolou and Villages",
+        "world cultural heritage"
+      ],
+      "audio": "audio/scenic_guides/kaiping/kaiping-s01.mp3"
+    },
+    {
+      "id": "kaiping-s02",
+      "en": "Today we explore Kaiping Diaolou and Villages in Jiangmen — an open-air museum where overseas Chinese dreams meet fortress walls.",
+      "zh": "今天我们探索江门的开平碉楼与村落——一座露天博物馆，华侨梦想与堡垒城墙在此相遇。",
+      "stopId": "stop-0",
+      "focusPhrases": [],
+      "audio": "audio/scenic_guides/kaiping/kaiping-s02.mp3"
+    },
+    {
+      "id": "kaiping-s03",
+      "en": "In the map of Lingnan architecture, these towers stand as world cultural heritage fortresses, alongside other Guangdong folk landmarks such as Xiguan houses, arcade buildings, Hakka round houses, and ritual compounds like the Chen Family Temple.",
+      "zh": "在岭南建筑版图上，这些碉楼作为世界文化遗产的堡垒式建筑而矗立，与西关大屋、骑楼、客家围屋，以及陈家祠这类礼制建筑并列。",
+      "stopId": "stop-0",
+      "focusPhrases": [],
+      "audio": "audio/scenic_guides/kaiping/kaiping-s03.mp3"
+    },
+    {
+      "id": "kaiping-s04",
+      "en": "A Kaiping diaolou is a watchtower-like building that combines defense, residence, and Chinese–Western architectural art.",
+      "zh": "开平碉楼是一种兼具防卫、居住和中西建筑艺术的塔楼式建筑。",
+      "stopId": "stop-1",
+      "focusPhrases": [
+        "defense",
+        "residence",
+        "Chinese–Western architectural art",
+        "“a Typical Work of Overseas Chinese Culture”",
+        "“the World Architectural Art Museum.”",
+        "key cultural relic under state protection",
+        "3,300",
+        "1,833"
+      ],
+      "audio": "audio/scenic_guides/kaiping/kaiping-s04.mp3"
+    },
+    {
+      "id": "kaiping-s05",
+      "en": "It has been hailed as “a Typical Work of Overseas Chinese Culture” and “the World Architectural Art Museum.” It is a key cultural relic under state protection.",
+      "zh": "它被誉为“华侨文化的典范之作”和“世界建筑艺术博物馆”，也是全国重点文物保护单位。",
+      "stopId": "stop-1",
+      "focusPhrases": [],
+      "audio": "audio/scenic_guides/kaiping/kaiping-s05.mp3"
+    },
+    {
+      "id": "kaiping-s06",
+      "en": "At its peak there were more than 3,300 towers; today about 1,833 remain registered; and twenty of the finest are on the UNESCO World Heritage List.",
+      "zh": "鼎盛时期有三千三百多座；今天登记在册的约一千八百三十三座；其中二十座精品列入联合国教科文组织世界遗产名录。",
+      "stopId": "stop-1",
+      "focusPhrases": [],
+      "audio": "audio/scenic_guides/kaiping/kaiping-s06.mp3"
+    },
+    {
+      "id": "kaiping-s07",
+      "en": "You may wonder why returned overseas Chinese built such towers.",
+      "zh": "大家可能会问：归侨为什么要建这样的楼？",
+      "stopId": "stop-2",
+      "focusPhrases": [
+        "low-lying land",
+        "floods",
+        "defense against bandits",
+        "refuge from floods"
+      ],
+      "audio": "audio/scenic_guides/kaiping/kaiping-s07.mp3"
+    },
+    {
+      "id": "kaiping-s08",
+      "en": "First, public order was bad; banditry was a headache, and better-off returned families became robbery targets.",
+      "zh": "第一，当时治安不好，匪患是大麻烦，较富裕的归侨家庭往往成为抢劫目标。",
+      "stopId": "stop-2",
+      "focusPhrases": [],
+      "audio": "audio/scenic_guides/kaiping/kaiping-s08.mp3"
+    },
+    {
+      "id": "kaiping-s09",
+      "en": "Second, Kaiping is low-lying land, and floods were frequent.",
+      "zh": "第二，开平地势低洼，洪水频发。",
+      "stopId": "stop-2",
+      "focusPhrases": [],
+      "audio": "audio/scenic_guides/kaiping/kaiping-s09.mp3"
+    },
+    {
+      "id": "kaiping-s10",
+      "en": "So these solid high-rises served both as defense against bandits and as refuge from floods.",
+      "zh": "所以这些坚固的高层建筑，既能防匪，又能避洪。",
+      "stopId": "stop-2",
+      "focusPhrases": [],
+      "audio": "audio/scenic_guides/kaiping/kaiping-s10.mp3"
+    },
+    {
+      "id": "kaiping-s11",
+      "en": "Functionally there are three forms:",
+      "zh": "按功能分，大致有三种：",
+      "stopId": "stop-3",
+      "focusPhrases": [],
+      "audio": "audio/scenic_guides/kaiping/kaiping-s11.mp3"
+    },
+    {
+      "id": "kaiping-s12",
+      "en": "Communal towers — jointly built by several families as temporary refuge; 2.",
+      "zh": "众楼——由几户人家合建，供临时避难；二、",
+      "stopId": "stop-3",
+      "focusPhrases": [],
+      "audio": "audio/scenic_guides/kaiping/kaiping-s12.mp3"
+    },
+    {
+      "id": "kaiping-s13",
+      "en": "Residential towers — built by rich individual families as fortified homes; 3.",
+      "zh": "居楼——富裕人家自建的堡垒式住宅；三、",
+      "stopId": "stop-3",
+      "focusPhrases": [],
+      "audio": "audio/scenic_guides/kaiping/kaiping-s13.mp3"
+    },
+    {
+      "id": "kaiping-s14",
+      "en": "Watchtowers — mainly for guarding against bandits.",
+      "zh": "更楼——主要用于防匪警戒。",
+      "stopId": "stop-3",
+      "focusPhrases": [],
+      "audio": "audio/scenic_guides/kaiping/kaiping-s14.mp3"
+    },
+    {
+      "id": "kaiping-s15",
+      "en": "Remember: communal, residential, watch.",
+      "zh": "记住三个词：众楼、居楼、更楼——communal, residential, watch。",
+      "stopId": "stop-3",
+      "focusPhrases": [],
+      "audio": "audio/scenic_guides/kaiping/kaiping-s15.mp3"
+    },
+    {
+      "id": "kaiping-s16",
+      "en": "In Zili Village, Mingshilou is the best of all.",
+      "zh": "在自力村，铭石楼 Mingshilou 是精品中的精品。",
+      "stopId": "stop-4",
+      "focusPhrases": [
+        "Zili Village",
+        "Mingshilou",
+        "1925",
+        "five-storey",
+        "residential tower",
+        "hexagonal observation pavilion",
+        "“swallow’s nest.”"
+      ],
+      "audio": "audio/scenic_guides/kaiping/kaiping-s16.mp3"
+    },
+    {
+      "id": "kaiping-s17",
+      "en": "Built in 1925, it is a five-storey reinforced-concrete residential tower.",
+      "zh": "建于一九二五年，是一座五层钢筋混凝土居楼。",
+      "stopId": "stop-4",
+      "focusPhrases": [],
+      "audio": "audio/scenic_guides/kaiping/kaiping-s17.mp3"
+    },
+    {
+      "id": "kaiping-s18",
+      "en": "On top sits a Chinese–Western hexagonal observation pavilion; on the fifth floor, each of the four corners has a blockhouse — also called a “swallow’s nest.” The tower is huge and imposing, with heavy iron doors and strong iron windows, luxuriously decorated and fully furnished for daily life.",
+      "zh": "楼顶有一座中西合璧的六角观景亭；五楼四角各有一个碉堡，又称“燕子窝”。整座楼体量宏大、气势雄伟，铁门铁窗厚重坚固，装饰豪华，生活设施齐全。",
+      "stopId": "stop-4",
+      "focusPhrases": [],
+      "audio": "audio/scenic_guides/kaiping/kaiping-s18.mp3"
+    },
+    {
+      "id": "kaiping-s19",
+      "en": "Ruishilou is the highest and most luxurious tower in Kaiping: nine storeys, about 25 meters high, armored concrete, with elegant traditional Chinese interiors — rated the No. 1 tower in Kaiping.",
+      "zh": "瑞石楼 Ruishilou 是开平最高、最豪华的碉楼：九层，高约二十五米，钢筋混凝土结构，内部为中国传统雅致装修——被评为开平第一楼。",
+      "stopId": "stop-5",
+      "focusPhrases": [
+        "Ruishilou",
+        "highest and most luxurious",
+        "nine storeys",
+        "25 meters",
+        "No. 1 tower"
+      ],
+      "audio": "audio/scenic_guides/kaiping/kaiping-s19.mp3"
+    },
+    {
+      "id": "kaiping-s20",
+      "en": "Fangshi Denglou, built in 1920 by the Fang family, is the most typical watchtower: open land, spacious views, and a full defense kit — electric generator, searchlights, and guns.",
+      "zh": "方氏灯楼 Fangshi Denglou 由方氏家族建于一九二〇年，是最典型的更楼：地势开阔、视野宽广，防卫设备齐全——发电机、探照灯和枪支。",
+      "stopId": "stop-5",
+      "focusPhrases": [],
+      "audio": "audio/scenic_guides/kaiping/kaiping-s20.mp3"
+    },
+    {
+      "id": "kaiping-s21",
+      "en": "Now we come to Li Garden (Li Yuan), in Beiyi Village, Tangkou Town.",
+      "zh": "现在我们来到立园 Li Garden，位于塘口镇北义村。",
+      "stopId": "stop-6",
+      "focusPhrases": [
+        "Li Garden",
+        "Beiyi Village, Tangkou Town",
+        "1936",
+        "“立园.”"
+      ],
+      "audio": "audio/scenic_guides/kaiping/kaiping-s21.mp3"
+    },
+    {
+      "id": "kaiping-s22",
+      "en": "Built in 1936, it is a villa garden mixing Chinese and Western styles.",
+      "zh": "建于一九三六年，是一座中西合璧的别墅园林。",
+      "stopId": "stop-6",
+      "focusPhrases": [],
+      "audio": "audio/scenic_guides/kaiping/kaiping-s22.mp3"
+    },
+    {
+      "id": "kaiping-s23",
+      "en": "On the tall arched gate are the characters “立园.”",
+      "zh": "高大的拱门上写着“立园”二字。",
+      "stopId": "stop-6",
+      "focusPhrases": [],
+      "audio": "audio/scenic_guides/kaiping/kaiping-s23.mp3"
+    },
+    {
+      "id": "kaiping-s24",
+      "en": "The American Chinese owner Xie Weili took the name from his own name, and it expresses the idiom Xiu Shen Li Ben — “cultivating one’s moral character is the foundation of success” — written on an archway in the garden.",
+      "zh": "美籍华人园主谢维立取自自己的名字，也寄托着园中牌坊所写的“修身立本”——培养品德是成功的根本。",
+      "stopId": "stop-6",
+      "focusPhrases": [],
+      "audio": "audio/scenic_guides/kaiping/kaiping-s24.mp3"
+    },
+    {
+      "id": "kaiping-s25",
+      "en": "The same idea appears in many inscriptions and couplets.",
+      "zh": "同一理念也出现在许多题字和对联中。",
+      "stopId": "stop-6",
+      "focusPhrases": [],
+      "audio": "audio/scenic_guides/kaiping/kaiping-s25.mp3"
+    },
+    {
+      "id": "kaiping-s26",
+      "en": "The garden has three areas: villa area, big garden area, and small garden area.",
+      "zh": "园林分三个区域：别墅区、大花园区和小花园区。",
+      "stopId": "stop-6",
+      "focusPhrases": [],
+      "audio": "audio/scenic_guides/kaiping/kaiping-s26.mp3"
+    },
+    {
+      "id": "kaiping-s27",
+      "en": "Main sights include the “Li Yuan” arched gate, the “Xiu Shen Li Ben” decorated archway, four bridge pavilions, and two Roman-style structures — the “Bird’s Nest” and the “Vine Pavilion.”",
+      "zh": "主要景点包括“立园”拱门、“修身立本”牌坊、四座桥亭，以及两座罗马式建筑——“鸟巢”和“藤亭”。",
+      "stopId": "stop-6",
+      "focusPhrases": [],
+      "audio": "audio/scenic_guides/kaiping/kaiping-s27.mp3"
+    },
+    {
+      "id": "kaiping-s28",
+      "en": "In the villa area, residential buildings combine Chinese and Western elements: foreign-style main structures, some with Chinese palace-like roofs; inside you find Western fireplaces and pendant lamps, Italian ceramic tiles, Chinese wooden furniture (including rosewood-style pieces), folk-story murals, and gilded wood-carvings.",
+      "zh": "别墅区的住宅建筑中西合璧：主体多为洋式结构，有的屋顶却像中国宫殿；室内有西式壁炉与吊灯、意大利瓷砖，也有中式木家具（含红木风格）、民间故事壁画和鎏金木雕。",
+      "stopId": "stop-6",
+      "focusPhrases": [],
+      "audio": "audio/scenic_guides/kaiping/kaiping-s28.mp3"
+    },
+    {
+      "id": "kaiping-s29",
+      "en": "Kaiping is safety, wealth, and cultural mixing in one skyline.",
+      "zh": "开平把安全、财富与文化交融，浓缩在同一片天际线上。",
+      "stopId": "stop-7",
+      "focusPhrases": [
+        "3,300 / 1,833 / 20",
+        "Mingshi, Ruishi, Fangshi",
+        "Xiu Shen Li Ben"
+      ],
+      "audio": "audio/scenic_guides/kaiping/kaiping-s29.mp3"
+    },
+    {
+      "id": "kaiping-s30",
+      "en": "Hold three numbers — 3,300 / 1,833 / 20 — three tower names — Mingshi, Ruishi, Fangshi — and one garden phrase — Xiu Shen Li Ben — and you can answer both scenic questions and interpretation passages on this site.",
+      "zh": "记住三组数字——三千三百、一千八百三十三、二十；三座楼名——铭石、瑞石、方氏；还有一句园中话——修身立本 Xiu Shen Li Ben——景点问答和口译段落你都能应对。",
+      "stopId": "stop-7",
+      "focusPhrases": [],
+      "audio": "audio/scenic_guides/kaiping/kaiping-s30.mp3"
+    },
+    {
+      "id": "kaiping-s31",
+      "en": "I welcome your questions.",
+      "zh": "欢迎提问。",
+      "stopId": "stop-7",
+      "focusPhrases": [],
+      "audio": "audio/scenic_guides/kaiping/kaiping-s31.mp3"
+    }
+  ],
+  "mustSay": [
+    "defense, residence, Chinese–Western",
+    "communal, residential, watch",
+    "Mingshilou",
+    "Xiu Shen Li Ben",
+    "3,300 / 1,833 / 20"
+  ]
+}

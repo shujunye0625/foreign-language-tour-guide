@@ -1,0 +1,45 @@
+{
+  "version": 1,
+  "spots": [
+    {
+      "id": "danxia",
+      "titleZh": "丹霞山",
+      "titleEn": "Danxia Mountain",
+      "blurb": "红石成因 · 群象睡美人 · 阴阳石 · 别传寺",
+      "file": "danxia.json",
+      "sentenceCount": 37
+    },
+    {
+      "id": "kaiping",
+      "titleZh": "开平碉楼",
+      "titleEn": "Kaiping Diaolou",
+      "blurb": "三大类 · 铭石楼 · 立园 · 修身立本",
+      "file": "kaiping.json",
+      "sentenceCount": 31
+    },
+    {
+      "id": "sun-yat-sen-hall",
+      "titleZh": "中山纪念堂",
+      "titleEn": "Sun Yat-sen Memorial Hall",
+      "blurb": "生平主线 · 吕彦直 · 无柱声学",
+      "file": "sun-yat-sen-hall.json",
+      "sentenceCount": 33
+    },
+    {
+      "id": "nanyue-king-museum",
+      "titleZh": "南越王墓",
+      "titleEn": "Nanyue King Tomb",
+      "blurb": "赵眜 · 金印玉印 · 丝缕玉衣 · 句鑃",
+      "file": "nanyue-king-museum.json",
+      "sentenceCount": 40
+    },
+    {
+      "id": "chen-family-temple",
+      "titleZh": "陈家祠",
+      "titleEn": "Chen Family Temple",
+      "blurb": "礼制明珠 · 爵禄封侯 · 六类工艺 · 舜帝",
+      "file": "chen-family-temple.json",
+      "sentenceCount": 32
+    }
+  ]
+}

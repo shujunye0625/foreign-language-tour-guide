@@ -1,96 +1,86 @@
 /**
- * 导游英语影子跟读 PWA
- * Modules: scenic_qa / service_norms / emergency / general_knowledge / e2c (+ curated c2e seed)
+ * 导游英语口语 PWA — 五景点讲解为主线（单文件模块）
  */
 
 const SPEEDS = [0.8, 1.0, 1.1];
-const DAILY_GOAL = 20;
-const STORAGE_KEY = "guide-shadow-v1";
+const STORAGE_KEY = "guide-oral-v2";
+const DAILY_LISTEN_GOAL = 40;
+const IDB_NAME = "guide-dict-v1";
+const IDB_STORE = "entries";
 
 const MODULE_META = {
-  scenic_qa: {
-    label: "景点问答",
-    strategy: "shadowing",
-    blurb: "100LS 影子跟读 · 导游腔清晰略慢",
-    banner: "听 3 遍 → 小声跟 3 遍 → 录 1 遍纠音 → 过关",
-  },
-  service_norms: {
-    label: "导游规范",
-    strategy: "roleplay",
-    blurb: "脚本记忆 + 角色扮演（你=地陪）",
-    banner: "先能开口用，再抠发音。欢迎辞等模板优先过关。",
-  },
-  emergency: {
-    label: "应变能力",
-    strategy: "task",
-    blurb: "DLI 任务导向 · 步骤语块 First / Then",
-    banner: "先看情景 → 口述步骤 → 再跟读标准答（别死背整篇）",
-  },
-  general_knowledge: {
-    label: "综合知识",
-    strategy: "keywords",
-    blurb: "关键词锚点 · 三句骨架",
-    banner: "定义一句 + 例子一句 + 评价一句。重点跟读答案正文。",
-  },
-  c2e: {
-    label: "汉译英",
-    strategy: "interpret",
-    blurb: "听–译–对 循环",
-    banner: "先看中文说英文 → 再听标准英文学舌跟读",
-  },
-  e2c: {
-    label: "英译汉",
-    strategy: "interpret",
-    blurb: "听–译–对 循环",
-    banner: "先听美音英文 → 说中文 → 对照范文",
-  },
+  scenic_qa: { label: "景点问答", blurb: "题库 · 与讲解互补", banner: "听范读 → 跟读 → 过关" },
+  service_norms: { label: "导游规范", blurb: "服务脚本", banner: "先能开口用，再抠发音" },
+  emergency: { label: "应变能力", blurb: "情景步骤语块", banner: "先看情景 → 口述 → 跟读" },
+  general_knowledge: { label: "综合知识", blurb: "关键词骨架", banner: "定义 + 例子 + 评价" },
+  c2e: { label: "汉译英", blurb: "听–译–对", banner: "先看中文说英文 → 再听标准英文" },
+  e2c: { label: "英译汉", blurb: "听–译–对", banner: "先听英文 → 说中文 → 对照" },
 };
-
-/** Curated commute-first packs (Danxia + welcome) */
-const SEED_FILTERS = {
-  danxia: (s) => s.module === "scenic_qa" && s.spot === "Danxia",
-  welcome: (s) => s.id.startsWith("service_norms-welcome"),
-};
-
-let corpus = { modules: {}, sentences: [] };
-let queue = [];
-let index = 0;
-let speedIdx = 1;
-let loopOn = false;
-let showZh = true;
-let recording = false;
-let mediaRecorder = null;
-let recognition = null;
-let state = loadState();
 
 const $ = (id) => document.getElementById(id);
-const audioEl = () => $("audio");
 
-function loadState() {
-  try {
-    return JSON.parse(localStorage.getItem(STORAGE_KEY)) || defaultState();
-  } catch {
-    return defaultState();
-  }
-}
+let corpus = { sentences: [] };
+let guidesIndex = { spots: [] };
+let phrasePatches = {};
+let state = loadState();
 
-function defaultState() {
-  return {
-    today: todayKey(),
-    todayPassed: 0,
-    progress: {}, // id -> { listen, shadow, passed }
-    weakWords: {}, // word -> count
-  };
-}
+/** Guide reader */
+let guide = null;
+let gIdx = 0;
+let gMode = "drill";
+let gLoop = true;
+let gSpeedIdx = 1;
+let gPlaying = false;
+let gRecorder = null;
+let gMeUrl = null;
+let dictTerm = "";
+
+/** Bank player */
+let queue = [];
+let qIdx = 0;
+let qLoop = false;
+let qSpeedIdx = 1;
+let showZh = true;
+let qRecorder = null;
+let qRecording = false;
+let qMeUrl = null;
+
+/** Vocab */
+let vocabDeck = [];
+let vocabIdx = 0;
+let vocabMode = "en2zh";
+
+/* ── Persistence ── */
 
 function todayKey() {
   return new Date().toISOString().slice(0, 10);
 }
 
+function defaultState() {
+  return {
+    today: todayKey(),
+    todayListen: 0,
+    todayShadow: 0,
+    progress: {},
+    weakWords: {},
+    savedDict: [],
+    lastGuide: null,
+  };
+}
+
+function loadState() {
+  try {
+    return { ...defaultState(), ...JSON.parse(localStorage.getItem(STORAGE_KEY) || "{}") };
+  } catch {
+    return defaultState();
+  }
+}
+
 function saveState() {
   if (state.today !== todayKey()) {
     state.today = todayKey();
-    state.todayPassed = 0;
+    state.todayListen = 0;
+    state.todayShadow = 0;
   }
   localStorage.setItem(STORAGE_KEY, JSON.stringify(state));
 }
@@ -102,152 +92,108 @@ function prog(id) {
 
 function showView(name) {
   document.querySelectorAll(".view").forEach((v) => v.classList.remove("active"));
-  $(`view-${name}`).classList.add("active");
+  const el = $(`view-${name}`);
+  if (el) el.classList.add("active");
 }
 
-function current() {
-  return queue[index] || null;
+function audioEl() {
+  return $("audio");
 }
 
-function audioUrl(s) {
-  if (!s?.audio) return null;
-  // s.audio like "audio/scenic_qa/xxx.mp3"
-  return s.audio;
+function audioMe() {
+  return $("audio-me");
 }
 
-async function playSentence() {
-  const s = current();
-  if (!s) return;
-  stopSpeech();
+function stopAudio() {
   const a = audioEl();
   a.pause();
   a.onended = null;
   a.onerror = null;
-  const url = audioUrl(s);
-  let usedFile = false;
-  if (url) {
-    usedFile = await new Promise((resolve) => {
-      let settled = false;
-      const finish = (ok) => {
-        if (settled) return;
-        settled = true;
-        resolve(ok);
-      };
-      a.onerror = () => finish(false);
-      a.onloadeddata = () => {
-        if (a.duration && isFinite(a.duration) && a.duration > 0.2) finish(true);
-        else finish(false);
-      };
-      a.src = url;
-      a.load();
-      setTimeout(() => finish(a.readyState >= 2), 2500);
-    });
-    if (usedFile) {
-      try {
-        a.playbackRate = SPEEDS[speedIdx];
-        a.onended = () => {
-          $("btn-play").textContent = "▶";
-          $("btn-play").classList.remove("playing");
-          if (loopOn) playSentence();
-        };
-        await a.play();
-      } catch {
-        usedFile = false;
-      }
-    }
-  }
-  if (!usedFile) {
-    speakFallback(s.en);
-  }
-  $("btn-play").textContent = "⏸";
-  $("btn-play").classList.add("playing");
-  const p = prog(s.id);
-  p.listen += 1;
-  saveState();
-  renderPlayerMeta();
-}
-
-function stopSpeech() {
+  a.onloadeddata = null;
   if (window.speechSynthesis) speechSynthesis.cancel();
+  gPlaying = false;
+  const gbp = $("btn-guide-play");
+  if (gbp) {
+    gbp.textContent = "▶";
+    gbp.classList.remove("playing");
+  }
+  const bp = $("btn-play");
+  if (bp) {
+    bp.textContent = "▶";
+    bp.classList.remove("playing");
+  }
 }
 
-function speakFallback(text) {
-  if (!window.speechSynthesis) {
-    alert("当前浏览器不支持语音，请先生成 MP3 音频。");
-    return;
-  }
-  const u = new SpeechSynthesisUtterance(text);
-  u.lang = "en-US";
-  u.rate = SPEEDS[speedIdx];
-  const voices = speechSynthesis.getVoices();
-  const us = voices.find((v) => /en-US/i.test(v.lang) && /neural|google|samantha|jenny|aria/i.test(v.name))
-    || voices.find((v) => /en-US/i.test(v.lang));
-  if (us) u.voice = us;
-  u.onend = () => {
-    $("btn-play").textContent = "▶";
-    $("btn-play").classList.remove("playing");
-    if (loopOn) playSentence();
-  };
-  speechSynthesis.speak(u);
-}
+/* ── Home ── */
 
-function pausePlay() {
-  const a = audioEl();
-  if (!a.paused) {
-    a.pause();
-    $("btn-play").textContent = "▶";
-    $("btn-play").classList.remove("playing");
-    return;
+function spotStats(spotId, n) {
+  let listen = 0;
+  let shadow = 0;
+  let touched = 0;
+  for (let i = 1; i <= n; i++) {
+    const id = `${spotId}-s${String(i).padStart(2, "0")}`;
+    const p = state.progress[id];
+    if (!p) continue;
+    listen += p.listen || 0;
+    shadow += p.shadow || 0;
+    if ((p.listen || 0) + (p.shadow || 0) > 0) touched += 1;
   }
-  if (window.speechSynthesis?.speaking) {
-    speechSynthesis.cancel();
-    $("btn-play").textContent = "▶";
-    $("btn-play").classList.remove("playing");
-    return;
-  }
-  playSentence();
+  return { listen, shadow, touched };
 }
 
 function renderHome() {
   if (state.today !== todayKey()) {
     state.today = todayKey();
-    state.todayPassed = 0;
+    state.todayListen = 0;
+    state.todayShadow = 0;
     saveState();
   }
-  $("today-goal").textContent = `${state.todayPassed} / ${DAILY_GOAL} 句`;
-  $("today-bar").style.width = `${Math.min(100, (state.todayPassed / DAILY_GOAL) * 100)}%`;
+  $("today-goal").textContent = `听 ${state.todayListen} · 跟 ${state.todayShadow}`;
+  $("today-bar").style.width = `${Math.min(100, (state.todayListen / DAILY_LISTEN_GOAL) * 100)}%`;
 
-  const counts = {};
-  for (const s of corpus.sentences) {
-    counts[s.module] = (counts[s.module] || 0) + 1;
+  if (state.lastGuide?.spotId) {
+    const meta = guidesIndex.spots.find((s) => s.id === state.lastGuide.spotId);
+    $("btn-continue").classList.remove("hidden");
+    $("continue-hint").textContent = meta
+      ? `上次：${meta.titleZh} · 第 ${(state.lastGuide.index || 0) + 1} 句`
+      : "继续上次讲解";
+  } else {
+    $("btn-continue").classList.add("hidden");
+    $("continue-hint").textContent = "打开任一景点，逐句听跟";
   }
 
-  const grid = $("module-grid");
-  grid.innerHTML = "";
-
-  // Seed shortcuts first
-  const seeds = [
-    { id: "seed-danxia", title: "★ 丹霞问答（通勤首包）", desc: "种子精练 · 影子跟读", filter: "danxia", module: "scenic_qa" },
-    { id: "seed-welcome", title: "★ 欢迎辞（开口必说）", desc: "规范模板 · 角色扮演", filter: "welcome", module: "service_norms" },
-  ];
-  for (const seed of seeds) {
+  const list = $("spot-list");
+  list.innerHTML = "";
+  for (const spot of guidesIndex.spots) {
+    const n = spot.sentenceCount || 0;
+    const st = spotStats(spot.id, n);
+    let status = "未开始";
+    if (n && st.touched >= n) status = "已串讲";
+    else if (st.touched > 0) status = `进行中 ${st.touched}/${n}`;
     const btn = document.createElement("button");
     btn.type = "button";
-    btn.className = "mod";
-    btn.innerHTML = `<strong>${seed.title}</strong><span>${seed.desc}</span><span class="tag">${MODULE_META[seed.module].banner}</span>`;
-    btn.onclick = () => openQueue(corpus.sentences.filter(SEED_FILTERS[seed.filter]), seed.title, seed.module);
-    grid.appendChild(btn);
+    btn.className = "spot-card";
+    btn.innerHTML = `<strong>${spot.titleZh}</strong>
+      <span class="en-title">${spot.titleEn}</span>
+      <span class="meta">${spot.blurb} · ${n} 句</span>
+      <span class="status">听 ${st.listen} · 跟 ${st.shadow} · ${status}</span>`;
+    btn.onclick = () => openGuide(spot.id);
+    list.appendChild(btn);
   }
 
+  const counts = {};
+  for (const s of corpus.sentences || []) counts[s.module] = (counts[s.module] || 0) + 1;
+  const grid = $("module-grid");
+  grid.innerHTML = "";
   for (const [key, meta] of Object.entries(MODULE_META)) {
     const n = counts[key] || 0;
     if (!n && key !== "c2e") continue;
     const btn = document.createElement("button");
     btn.type = "button";
     btn.className = "mod";
-    btn.innerHTML = `<strong>${meta.label}</strong><span>${meta.blurb} · ${n} 句</span><span class="tag">${meta.strategy}</span>`;
+    btn.innerHTML = `<strong>${meta.label}</strong><span>${meta.blurb} · ${n} 句</span>`;
     btn.onclick = () => openQueue(
-      corpus.sentences.filter((s) => s.module === key),
+      (corpus.sentences || []).filter((s) => s.module === key),
       meta.label,
       key
     );
@@ -255,47 +201,529 @@ function renderHome() {
   }
 }
 
-function openQueue(list, title, moduleKey) {
-  if (!list.length) {
-    alert("该模块暂无句子，请先运行语料抽取。");
+/* ── Guide reader ── */
+
+async function openGuide(spotId, resumeIndex) {
+  stopAudio();
+  const meta = guidesIndex.spots.find((s) => s.id === spotId);
+  if (!meta) return;
+  const res = await fetch(`./data/scenic_guides/${meta.file}`);
+  guide = await res.json();
+  if (typeof resumeIndex === "number") {
+    gIdx = Math.min(Math.max(0, resumeIndex), guide.sentences.length - 1);
+  } else if (state.lastGuide?.spotId === spotId) {
+    gIdx = Math.min(state.lastGuide.index || 0, guide.sentences.length - 1);
+  } else {
+    gIdx = 0;
+  }
+  gMode = "drill";
+  gLoop = true;
+  gMeUrl = null;
+  $("mode-drill").classList.add("on");
+  $("mode-full").classList.remove("on");
+  $("btn-guide-loop").classList.add("on");
+  $("btn-guide-replay-me").classList.add("hidden");
+  $("guide-title").textContent = guide.titleZh;
+  $("guide-sub").textContent = guide.titleEn;
+  renderGuideReader();
+  highlightGuide(true);
+  updateGuideChrome();
+  updateAnchor();
+  showView("guide");
+  state.lastGuide = { spotId: guide.id, index: gIdx };
+  saveState();
+}
+
+function renderGuideReader() {
+  const root = $("guide-reader");
+  root.innerHTML = "";
+  const stopMap = Object.fromEntries((guide.stops || []).map((s) => [s.id, s]));
+  let lastStop = null;
+  guide.sentences.forEach((s, i) => {
+    const pair = document.createElement("div");
+    pair.className = "pair";
+    pair.dataset.i = String(i);
+    if (s.stopId !== lastStop) {
+      lastStop = s.stopId;
+      const stop = stopMap[s.stopId];
+      if (stop) {
+        const tag = document.createElement("span");
+        tag.className = "stop-tag";
+        tag.textContent = stop.title;
+        pair.appendChild(tag);
+      }
+    }
+    const en = document.createElement("p");
+    en.className = "en";
+    en.appendChild(tokenize(s.en, s.focusPhrases || []));
+    const zh = document.createElement("p");
+    zh.className = "zh";
+    zh.textContent = s.zh || "";
+    pair.appendChild(en);
+    pair.appendChild(zh);
+    pair.addEventListener("click", (ev) => {
+      if (ev.target.closest(".word")) return;
+      gIdx = i;
+      persistGuide();
+      highlightGuide(true);
+      updateGuideChrome();
+      updateAnchor();
+      playGuide();
+    });
+    root.appendChild(pair);
+  });
+}
+
+function tokenize(text, phrases) {
+  const frag = document.createDocumentFragment();
+  const sorted = [...phrases].filter(Boolean).sort((a, b) => b.length - a.length);
+  let rest = text;
+  const pushPlain = (chunk) => {
+    chunk.split(/(\s+|[,.;:!?"""''—–-])/).filter(Boolean).forEach((tok) => {
+      if (/^[A-Za-z][A-Za-z'-]*$/.test(tok)) frag.appendChild(wordSpan(tok));
+      else frag.appendChild(document.createTextNode(tok));
+    });
+  };
+  while (rest.length) {
+    let at = -1;
+    let hit = null;
+    for (const ph of sorted) {
+      const idx = rest.toLowerCase().indexOf(ph.toLowerCase());
+      if (idx >= 0 && (at < 0 || idx < at)) {
+        at = idx;
+        hit = rest.slice(idx, idx + ph.length);
+      }
+    }
+    if (hit == null) {
+      pushPlain(rest);
+      break;
+    }
+    if (at > 0) pushPlain(rest.slice(0, at));
+    frag.appendChild(wordSpan(hit));
+    rest = rest.slice(at + hit.length);
+  }
+  return frag;
+}
+
+function wordSpan(text) {
+  const span = document.createElement("span");
+  span.className = "word";
+  span.textContent = text;
+  span.onclick = (e) => {
+    e.stopPropagation();
+    openDict(text.trim());
+  };
+  return span;
+}
+
+function highlightGuide(scroll) {
+  document.querySelectorAll("#guide-reader .pair").forEach((el) => {
+    el.classList.toggle("active", Number(el.dataset.i) === gIdx);
+  });
+  if (scroll) {
+    document.querySelector(`#guide-reader .pair[data-i="${gIdx}"]`)
+      ?.scrollIntoView({ behavior: "smooth", block: "center" });
+  }
+}
+
+function updateGuideChrome() {
+  if (!guide) return;
+  const s = guide.sentences[gIdx];
+  $("guide-pos").textContent = `${gIdx + 1} / ${guide.sentences.length}`;
+  const p = prog(s.id);
+  $("guide-ls").textContent = `听 ${p.listen} · 跟 ${p.shadow}`;
+  $("btn-guide-speed").textContent = `${SPEEDS[gSpeedIdx].toFixed(1)}x`;
+  $("btn-guide-loop").classList.toggle("on", gLoop);
+  $("btn-guide-replay-me").classList.toggle("hidden", !gMeUrl);
+}
+
+function updateAnchor() {
+  if (!guide) return;
+  const s = guide.sentences[gIdx];
+  const stop = (guide.stops || []).find((st) => st.id === s.stopId);
+  if (!stop) {
+    $("anchor-card").classList.add("hidden");
     return;
   }
-  // Prefer sentences with usable English for shadowing
+  $("anchor-card").classList.remove("hidden");
+  $("anchor-hook").textContent = `📍 ${stop.sceneHook || stop.title}`;
+  const must = (stop.mustSay && stop.mustSay.length)
+    ? stop.mustSay
+    : (guide.mustSay || []).slice(0, 3);
+  $("anchor-must").textContent = must.length ? `Must-say：${must.join(" · ")}` : "";
+}
+
+function persistGuide() {
+  if (!guide) return;
+  state.lastGuide = { spotId: guide.id, index: gIdx };
+  saveState();
+}
+
+function curGuide() {
+  return guide?.sentences?.[gIdx] || null;
+}
+
+function tryPlay(a, url, rate, onEnded) {
+  return new Promise((resolve) => {
+    let done = false;
+    const fin = (ok) => {
+      if (done) return;
+      done = true;
+      resolve(ok);
+    };
+    a.onerror = () => fin(false);
+    a.onloadeddata = () => fin(!!(a.duration && isFinite(a.duration) && a.duration > 0.15));
+    a.src = url;
+    a.load();
+    setTimeout(() => fin(a.readyState >= 2), 2500);
+  }).then(async (ok) => {
+    if (!ok) return false;
+    try {
+      a.playbackRate = rate;
+      a.onended = onEnded;
+      await a.play();
+      return true;
+    } catch {
+      return false;
+    }
+  });
+}
+
+function speak(text, rate, onEnded) {
+  if (!window.speechSynthesis) {
+    alert("浏览器不支持语音，请先生成 MP3。");
+    onEnded?.();
+    return;
+  }
+  const u = new SpeechSynthesisUtterance(text);
+  u.lang = "en-US";
+  u.rate = rate;
+  const voices = speechSynthesis.getVoices();
+  const v = voices.find((x) => /en-US/i.test(x.lang) && /neural|google|samantha|jenny|aria/i.test(x.name))
+    || voices.find((x) => /en-US/i.test(x.lang));
+  if (v) u.voice = v;
+  u.onend = onEnded;
+  speechSynthesis.speak(u);
+}
+
+async function playGuide() {
+  const s = curGuide();
+  if (!s) return;
+  stopAudio();
+  const a = audioEl();
+  let ok = false;
+  if (s.audio) ok = await tryPlay(a, s.audio, SPEEDS[gSpeedIdx], onGuideEnded);
+  if (!ok) speak(s.en, SPEEDS[gSpeedIdx], onGuideEnded);
+  gPlaying = true;
+  $("btn-guide-play").textContent = "⏸";
+  $("btn-guide-play").classList.add("playing");
+}
+
+function onGuideEnded() {
+  const s = curGuide();
+  if (s) {
+    prog(s.id).listen += 1;
+    state.todayListen += 1;
+    saveState();
+    updateGuideChrome();
+    renderHome();
+  }
+  if (gMode === "drill") {
+    if (gLoop) {
+      playGuide();
+      return;
+    }
+    gPlaying = false;
+    $("btn-guide-play").textContent = "▶";
+    $("btn-guide-play").classList.remove("playing");
+    return;
+  }
+  if (gIdx < guide.sentences.length - 1) {
+    gIdx += 1;
+    persistGuide();
+    highlightGuide(true);
+    updateGuideChrome();
+    updateAnchor();
+    playGuide();
+  } else {
+    gPlaying = false;
+    $("btn-guide-play").textContent = "▶";
+    $("btn-guide-play").classList.remove("playing");
+  }
+}
+
+function toggleGuidePlay() {
+  const a = audioEl();
+  if (gPlaying && (!a.paused || speechSynthesis?.speaking)) {
+    stopAudio();
+    return;
+  }
+  playGuide();
+}
+
+function guideGo(delta) {
+  if (!guide) return;
+  stopAudio();
+  gIdx = Math.min(Math.max(0, gIdx + delta), guide.sentences.length - 1);
+  gMeUrl = null;
+  $("btn-guide-replay-me").classList.add("hidden");
+  persistGuide();
+  highlightGuide(true);
+  updateGuideChrome();
+  updateAnchor();
+  if (gMode === "drill") playGuide();
+}
+
+async function toggleGuideRecord() {
+  const s = curGuide();
+  if (!s) return;
+  if (gRecorder && gRecorder.state !== "inactive") {
+    gRecorder.stop();
+    return;
+  }
+  try {
+    const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
+    const chunks = [];
+    gRecorder = new MediaRecorder(stream);
+    gRecorder.ondataavailable = (e) => chunks.push(e.data);
+    gRecorder.onstop = () => {
+      stream.getTracks().forEach((t) => t.stop());
+      if (gMeUrl) URL.revokeObjectURL(gMeUrl);
+      gMeUrl = URL.createObjectURL(new Blob(chunks, { type: "audio/webm" }));
+      prog(s.id).shadow += 1;
+      state.todayShadow += 1;
+      saveState();
+      updateGuideChrome();
+      renderHome();
+      $("btn-guide-record").textContent = "跟读";
+      $("btn-guide-record").classList.remove("recording");
+      $("btn-guide-replay-me").classList.remove("hidden");
+      $("guide-mic-hint").textContent = "已录好，可点「回听我的」对照范读";
+    };
+    gRecorder.start();
+    $("btn-guide-record").textContent = "停止";
+    $("btn-guide-record").classList.add("recording");
+    $("guide-mic-hint").textContent = "录制中…再点一次停止";
+  } catch {
+    alert("无法使用麦克风，请允许本站录音。");
+  }
+}
+
+function replayMe() {
+  if (!gMeUrl) return;
+  stopAudio();
+  const a = audioMe();
+  a.src = gMeUrl;
+  a.play().catch(() => {});
+}
+
+function openStops() {
+  if (!guide) return;
+  const ul = $("stops-ul");
+  ul.innerHTML = "";
+  for (const stop of guide.stops || []) {
+    const li = document.createElement("li");
+    const btn = document.createElement("button");
+    btn.type = "button";
+    btn.innerHTML = `<strong>${stop.title}</strong>
+      <span class="hook">${stop.sceneHook || ""}</span>
+      ${stop.mustSay?.length ? `<span class="must">Must-say：${stop.mustSay.join(" · ")}</span>` : ""}`;
+    btn.onclick = () => {
+      gIdx = stop.sentenceStart ?? 0;
+      persistGuide();
+      highlightGuide(true);
+      updateGuideChrome();
+      updateAnchor();
+      closeStops();
+      playGuide();
+    };
+    li.appendChild(btn);
+    ul.appendChild(li);
+  }
+  $("stops-drawer").classList.remove("hidden");
+}
+
+function closeStops() {
+  $("stops-drawer").classList.add("hidden");
+}
+
+/* ── Dictionary ── */
+
+function idbOpen() {
+  return new Promise((resolve, reject) => {
+    const req = indexedDB.open(IDB_NAME, 1);
+    req.onupgradeneeded = () => req.result.createObjectStore(IDB_STORE);
+    req.onsuccess = () => resolve(req.result);
+    req.onerror = () => reject(req.error);
+  });
+}
+
+async function idbGet(key) {
+  try {
+    const db = await idbOpen();
+    return await new Promise((resolve) => {
+      const r = db.transaction(IDB_STORE).objectStore(IDB_STORE).get(key);
+      r.onsuccess = () => resolve(r.result || null);
+      r.onerror = () => resolve(null);
+    });
+  } catch {
+    return null;
+  }
+}
+
+async function idbSet(key, val) {
+  try {
+    const db = await idbOpen();
+    await new Promise((resolve) => {
+      const tx = db.transaction(IDB_STORE, "readwrite");
+      tx.objectStore(IDB_STORE).put(val, key);
+      tx.oncomplete = () => resolve();
+      tx.onerror = () => resolve();
+    });
+  } catch { /* ignore */ }
+}
+
+function findPatch(term) {
+  const t = term.toLowerCase();
+  for (const [k, v] of Object.entries(phrasePatches)) {
+    if (k.toLowerCase() === t) return v;
+  }
+  for (const [k, v] of Object.entries(phrasePatches)) {
+    if (t.includes(k.toLowerCase()) || k.toLowerCase().includes(t)) return v;
+  }
+  return null;
+}
+
+function normalizeDict(entry) {
+  const phonetic = entry.phonetic
+    || (entry.phonetics || []).map((p) => p.text).find(Boolean)
+    || "";
+  const audio = (entry.phonetics || []).map((p) => p.audio).find(Boolean);
+  const meanings = [];
+  for (const m of entry.meanings || []) {
+    for (const d of (m.definitions || []).slice(0, 3)) {
+      meanings.push({ pos: m.partOfSpeech, def: d.definition, example: d.example || "" });
+    }
+  }
+  return { phonetic, audio, meanings: meanings.slice(0, 8) };
+}
+
+function renderPatch(term, patch) {
+  $("dict-ipa").textContent = patch.ipa || "";
+  const senses = (patch.senses || []).map((s) => `<li>${s}</li>`).join("");
+  $("dict-body").innerHTML = `<p><strong>${patch.gloss || ""}</strong></p>
+    <h4>义项</h4><ul>${senses || "<li>—</li>"}</ul>
+    <p class="ex">导游术语本地补丁</p>`;
+  dictTerm = term;
+  delete $("dict-body").dataset.audio;
+}
+
+function renderDict(term, payload) {
+  $("dict-ipa").textContent = payload.phonetic || "";
+  $("dict-body").innerHTML = (payload.meanings || []).map((m) => `
+    <h4>${m.pos || "sense"}</h4>
+    <ul><li>${m.def}${m.example ? `<div class="ex">e.g. ${m.example}</div>` : ""}</li></ul>
+  `).join("") || "<p>无释义</p>";
+  dictTerm = term;
+  if (payload.audio) $("dict-body").dataset.audio = payload.audio;
+  else delete $("dict-body").dataset.audio;
+}
+
+async function openDict(term) {
+  dictTerm = term.replace(/^[^A-Za-z]+|[^A-Za-z']+$/g, "");
+  if (!dictTerm) return;
+  $("dict-word").textContent = dictTerm;
+  $("dict-ipa").textContent = "加载中…";
+  $("dict-body").innerHTML = "";
+  $("dict-sheet").classList.remove("hidden");
+
+  const patch = findPatch(dictTerm);
+  if (patch) {
+    renderPatch(dictTerm, patch);
+    return;
+  }
+  const cached = await idbGet(dictTerm.toLowerCase());
+  if (cached) {
+    renderDict(dictTerm, cached);
+    return;
+  }
+  try {
+    const res = await fetch(
+      `https://api.dictionaryapi.dev/api/v2/entries/en/${encodeURIComponent(dictTerm.toLowerCase())}`
+    );
+    if (!res.ok) throw new Error("nf");
+    const data = await res.json();
+    const payload = normalizeDict(Array.isArray(data) ? data[0] : data);
+    await idbSet(dictTerm.toLowerCase(), payload);
+    renderDict(dictTerm, payload);
+  } catch {
+    $("dict-ipa").textContent = "";
+    $("dict-body").innerHTML = "<p>未找到释义。可收藏后结合本句中文理解。</p>";
+  }
+}
+
+function closeDict() {
+  $("dict-sheet").classList.add("hidden");
+}
+
+function speakDict() {
+  const url = $("dict-body").dataset.audio;
+  if (url) {
+    const a = audioMe();
+    a.src = url;
+    a.play().catch(() => speak(dictTerm, 1, null));
+    return;
+  }
+  speak(dictTerm, 1, null);
+}
+
+function saveDictTerm() {
+  if (!dictTerm) return;
+  if (!state.savedDict.includes(dictTerm)) state.savedDict.push(dictTerm);
+  const k = dictTerm.toLowerCase();
+  state.weakWords[k] = (state.weakWords[k] || 0) + 1;
+  saveState();
+  $("btn-dict-save").textContent = "已收藏";
+  setTimeout(() => { $("btn-dict-save").textContent = "收藏"; }, 1000);
+}
+
+/* ── Bank player ── */
+
+function openQueue(list, title, moduleKey) {
+  if (!list.length) {
+    alert("该模块暂无句子。");
+    return;
+  }
   queue = list.filter((s) => (s.en || "").trim().length > 8);
   if (!queue.length) queue = list;
-  index = 0;
+  qIdx = 0;
   $("player-title").textContent = title;
   const meta = MODULE_META[moduleKey] || MODULE_META.scenic_qa;
   $("player-strategy").textContent = meta.blurb;
   $("mode-banner").textContent = meta.banner;
   $("view-player").dataset.module = moduleKey;
   showView("player");
-  renderSentence();
+  renderPlayer();
 }
 
-function renderSentence() {
-  const s = current();
+function curQ() {
+  return queue[qIdx] || null;
+}
+
+function renderPlayer() {
+  const s = curQ();
   if (!s) return;
   const moduleKey = $("view-player").dataset.module || s.module;
   $("score-panel").classList.add("hidden");
   $("en-text").textContent = s.en || "";
-  $("zh-text").textContent = s.zh || s.questionZh || "";
-  // 口译汉译英：默认先看中文题干，再跟读英文
-  if (moduleKey === "c2e") {
-    showZh = true;
-    $("zh-text").textContent = s.questionZh || s.zh || "";
-    $("btn-toggle-zh").textContent = "中";
-  }
+  $("zh-text").textContent = moduleKey === "c2e"
+    ? (s.questionZh || s.zh || "")
+    : (s.zh || s.questionZh || "");
   $("zh-text").classList.toggle("hidden", !showZh);
-  const qParts = [];
-  if (s.spot) qParts.push(`[${s.spot}]`);
-  if (moduleKey === "emergency" || moduleKey === "service_norms") {
-    if (s.questionZh) qParts.push(s.questionZh);
-    else if (s.questionEn) qParts.push(s.questionEn);
-  } else if (s.questionZh) {
-    qParts.push(s.questionZh);
-  }
-  $("q-label").textContent = qParts.join(" · ");
+  const parts = [];
+  if (s.spot) parts.push(`[${s.spot}]`);
+  if (s.questionZh) parts.push(s.questionZh);
+  $("q-label").textContent = parts.join(" · ");
   const fw = $("focus-words");
   fw.innerHTML = "";
   (s.focusWords || []).forEach((w) => {
@@ -303,167 +731,148 @@ function renderSentence() {
     b.textContent = w;
     fw.appendChild(b);
   });
-  renderPlayerMeta();
-  const url = audioUrl(s);
-  if (url) {
-    audioEl().src = url;
-    audioEl().playbackRate = SPEEDS[speedIdx];
+  const p = prog(s.id);
+  $("pos-label").textContent = `${qIdx + 1} / ${queue.length}`;
+  $("ls-label").textContent = `听 ${p.listen} · 跟 ${p.shadow}${p.passed ? " · 已过关" : ""}`;
+  $("btn-loop").classList.toggle("on", qLoop);
+  $("btn-speed").textContent = `${SPEEDS[qSpeedIdx].toFixed(1)}x`;
+  if (s.audio) {
+    audioEl().src = s.audio;
+    audioEl().playbackRate = SPEEDS[qSpeedIdx];
   }
 }
 
-function renderPlayerMeta() {
-  const s = current();
+async function playPlayer() {
+  const s = curQ();
   if (!s) return;
-  $("pos-label").textContent = `${index + 1} / ${queue.length}`;
-  const p = prog(s.id);
-  $("ls-label").textContent = `听 ${p.listen} · 跟 ${p.shadow}${p.passed ? " · 已过关" : ""}`;
-  $("btn-loop").classList.toggle("on", loopOn);
-  $("btn-speed").textContent = `${SPEEDS[speedIdx].toFixed(1)}x`;
+  stopAudio();
+  const a = audioEl();
+  let ok = false;
+  if (s.audio) ok = await tryPlay(a, s.audio, SPEEDS[qSpeedIdx], onPlayerEnded);
+  if (!ok) speak(s.en, SPEEDS[qSpeedIdx], onPlayerEnded);
+  $("btn-play").textContent = "⏸";
+  $("btn-play").classList.add("playing");
 }
 
-function go(delta) {
-  stopSpeech();
-  audioEl().pause();
+function onPlayerEnded() {
+  const s = curQ();
+  if (s) {
+    prog(s.id).listen += 1;
+    state.todayListen += 1;
+    saveState();
+    renderPlayer();
+  }
+  if (qLoop) {
+    playPlayer();
+    return;
+  }
   $("btn-play").textContent = "▶";
   $("btn-play").classList.remove("playing");
-  index = (index + delta + queue.length) % queue.length;
-  renderSentence();
+}
+
+function togglePlayerPlay() {
+  const a = audioEl();
+  if (!a.paused || speechSynthesis?.speaking) {
+    stopAudio();
+    return;
+  }
+  playPlayer();
+}
+
+function goPlayer(delta) {
+  stopAudio();
+  qIdx = (qIdx + delta + queue.length) % queue.length;
+  renderPlayer();
 }
 
 function markPass() {
-  const s = current();
+  const s = curQ();
   if (!s) return;
-  const p = prog(s.id);
-  if (!p.passed) {
-    p.passed = true;
-    state.todayPassed += 1;
-  }
+  prog(s.id).passed = true;
   saveState();
-  renderPlayerMeta();
-  renderHome();
-  if (index < queue.length - 1) go(1);
+  renderPlayer();
+  if (qIdx < queue.length - 1) goPlayer(1);
 }
 
-/* —— Pronunciation: Web Speech Recognition compare —— */
-function normalizeWords(text) {
-  return (text || "")
-    .toLowerCase()
-    .replace(/[^a-z'\s]/g, " ")
-    .split(/\s+/)
-    .filter(Boolean);
-}
-
-function scorePronunciation(expected, heard) {
-  const exp = normalizeWords(expected);
-  const got = new Set(normalizeWords(heard));
-  if (!exp.length) return { score: 0, missing: [], heard };
-  const missing = exp.filter((w) => w.length > 2 && !got.has(w));
-  const hit = exp.length - missing.length;
-  const score = Math.round((hit / exp.length) * 100);
-  return { score, missing, heard };
-}
-
-function addWeakWords(words) {
-  for (const w of words) {
-    state.weakWords[w] = (state.weakWords[w] || 0) + 1;
-  }
-  saveState();
-}
-
-async function startRecord() {
-  const s = current();
+async function togglePlayerRecord() {
+  const s = curQ();
   if (!s) return;
-  if (recording) {
-    stopRecord();
+  if (qRecording) {
+    qRecorder?.stop();
     return;
   }
-
-  const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
-  if (!SpeechRecognition) {
-    // Fallback: just record audio for self-listen
-    try {
-      const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
-      mediaRecorder = new MediaRecorder(stream);
-      const chunks = [];
-      mediaRecorder.ondataavailable = (e) => chunks.push(e.data);
-      mediaRecorder.onstop = () => {
-        const blob = new Blob(chunks, { type: "audio/webm" });
-        const url = URL.createObjectURL(blob);
-        $("score-panel").classList.remove("hidden");
-        $("score-num").textContent = "自听";
-        $("score-detail").textContent = "本机不支持语音识别，已录音供你对照标准音自查。";
-        $("weak-list").innerHTML = `<audio controls src="${url}"></audio>`;
-        stream.getTracks().forEach((t) => t.stop());
-      };
-      mediaRecorder.start();
-      recording = true;
-      $("btn-record").textContent = "⏹ 结束录音";
-      $("mic-hint").textContent = "说完后点结束，回放自查";
-      return;
-    } catch {
-      alert("无法使用麦克风，请在系统设置中允许本站录音。");
-      return;
-    }
+  try {
+    const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
+    const chunks = [];
+    qRecorder = new MediaRecorder(stream);
+    qRecorder.ondataavailable = (e) => chunks.push(e.data);
+    qRecorder.onstop = () => {
+      stream.getTracks().forEach((t) => t.stop());
+      if (qMeUrl) URL.revokeObjectURL(qMeUrl);
+      qMeUrl = URL.createObjectURL(new Blob(chunks, { type: "audio/webm" }));
+      prog(s.id).shadow += 1;
+      state.todayShadow += 1;
+      saveState();
+      $("score-panel").classList.remove("hidden");
+      $("score-num").textContent = "自听";
+      $("score-detail").textContent = "已录音，可播放对照范读。";
+      $("weak-list").innerHTML = `<audio controls src="${qMeUrl}"></audio>`;
+      qRecording = false;
+      $("btn-record").textContent = "跟读";
+      $("mic-hint").textContent = "录音回听自查（不做纠音评分）";
+      renderPlayer();
+    };
+    qRecorder.start();
+    qRecording = true;
+    $("btn-record").textContent = "停止";
+    $("mic-hint").textContent = "录制中…再点停止";
+  } catch {
+    alert("无法使用麦克风。");
   }
-
-  recognition = new SpeechRecognition();
-  recognition.lang = "en-US";
-  recognition.interimResults = false;
-  recognition.maxAlternatives = 1;
-  recognition.onresult = (ev) => {
-    const heard = ev.results[0][0].transcript;
-    const result = scorePronunciation(s.en, heard);
-    $("score-panel").classList.remove("hidden");
-    $("score-num").textContent = `${result.score}`;
-    $("score-detail").textContent = `识别：${heard || "（未识别到）"}`;
-    const box = $("weak-list");
-    box.innerHTML = "";
-    if (result.missing.length) {
-      result.missing.slice(0, 8).forEach((w) => {
-        const el = document.createElement("span");
-        el.className = "weak-hit";
-        el.textContent = w;
-        box.appendChild(el);
-      });
-      addWeakWords(result.missing.slice(0, 8));
-    } else {
-      box.textContent = "本句关键词基本命中，继续影子跟读！";
-    }
-    const p = prog(s.id);
-    p.shadow += 1;
-    if (result.score >= 80 && !p.passed) {
-      p.passed = true;
-      state.todayPassed += 1;
-    }
-    saveState();
-    renderPlayerMeta();
-    renderHome();
-  };
-  recognition.onerror = () => {
-    $("mic-hint").textContent = "识别失败，请靠近麦克风再说一遍";
-    recording = false;
-    $("btn-record").textContent = "🎤 跟读纠音";
-  };
-  recognition.onend = () => {
-    recording = false;
-    $("btn-record").textContent = "🎤 跟读纠音";
-    $("mic-hint").textContent = "录音后用语音识别对比标准句，标出弱项词";
-  };
-  recording = true;
-  $("btn-record").textContent = "⏹ 说完松手…";
-  $("mic-hint").textContent = "请朗读屏幕上的英文句…";
-  recognition.start();
 }
 
-function stopRecord() {
-  if (recognition) {
-    try { recognition.stop(); } catch { /* ignore */ }
+/* ── Vocab ── */
+
+function buildVocabDeck() {
+  const items = [];
+  for (const term of state.savedDict) {
+    const patch = findPatch(term);
+    items.push({ en: term, zh: patch?.gloss || "（已收藏）" });
   }
-  if (mediaRecorder && mediaRecorder.state !== "inactive") {
-    mediaRecorder.stop();
+  for (const [w, c] of Object.entries(state.weakWords)) {
+    if (items.some((x) => x.en.toLowerCase() === w)) continue;
+    items.push({ en: w, zh: `弱项 ×${c}` });
   }
-  recording = false;
-  $("btn-record").textContent = "🎤 跟读纠音";
+  for (const [en, patch] of Object.entries(phrasePatches)) {
+    if (items.length >= 48) break;
+    if (items.some((x) => x.en === en)) continue;
+    items.push({ en, zh: patch.gloss || (patch.senses || [])[0] || "" });
+  }
+  return items.length ? items : [{ en: "Danxia Landform", zh: "丹霞地貌" }];
+}
+
+function openVocab() {
+  vocabDeck = buildVocabDeck();
+  vocabIdx = 0;
+  vocabMode = "en2zh";
+  showView("vocab");
+  renderVocab(false);
+}
+
+function renderVocab(reveal) {
+  const card = vocabDeck[vocabIdx % vocabDeck.length];
+  if (!card) return;
+  if (vocabMode === "en2zh") {
+    $("vocab-front").textContent = card.en;
+    $("vocab-back").textContent = card.zh;
+  } else if (vocabMode === "zh2en") {
+    $("vocab-front").textContent = card.zh;
+    $("vocab-back").textContent = card.en;
+  } else {
+    $("vocab-front").textContent = "（遮句）请口头复述英文，再显示对照";
+    $("vocab-back").textContent = `${card.en}\n${card.zh}`;
+  }
+  $("vocab-back").classList.toggle("hidden", !reveal);
 }
 
 function renderWeak() {
@@ -471,31 +880,76 @@ function renderWeak() {
   const ul = $("weak-ul");
   ul.innerHTML = "";
   $("weak-empty").style.display = entries.length ? "none" : "block";
-  for (const [w, c] of entries.slice(0, 50)) {
+  for (const [w, c] of entries.slice(0, 80)) {
     const li = document.createElement("li");
     li.innerHTML = `<span>${w}</span><span class="count">×${c}</span>`;
+    li.onclick = () => openDict(w);
     ul.appendChild(li);
   }
 }
 
-async function loadCorpus() {
-  const res = await fetch("./data/corpus.json");
-  corpus = await res.json();
-  ensureWelcomeSeed();
-}
-
-function ensureWelcomeSeed() {
-  const has = corpus.sentences.some((s) => s.id.startsWith("service_norms-welcome"));
-  if (has) return;
-  // already in extract seed usually
-}
+/* ── Bind / boot ── */
 
 function bind() {
-  $("btn-back").onclick = () => { stopSpeech(); audioEl().pause(); showView("home"); renderHome(); };
+  $("btn-continue").onclick = () => {
+    if (state.lastGuide?.spotId) openGuide(state.lastGuide.spotId, state.lastGuide.index);
+  };
+  $("btn-bank-toggle").onclick = () => {
+    const grid = $("module-grid");
+    const collapsed = grid.classList.toggle("collapsed");
+    $("btn-bank-toggle").classList.toggle("open", !collapsed);
+    $("btn-bank-toggle").setAttribute("aria-expanded", collapsed ? "false" : "true");
+  };
+  $("btn-vocab").onclick = () => openVocab();
+  $("btn-weak").onclick = () => { renderWeak(); showView("weak"); };
+  $("btn-install-help").onclick = () => showView("install");
+
+  $("btn-guide-back").onclick = () => { stopAudio(); showView("home"); renderHome(); };
+  $("btn-guide-menu").onclick = () => openStops();
+  $("btn-stops-close").onclick = () => closeStops();
+  $("stops-backdrop").onclick = () => closeStops();
+
+  $("mode-drill").onclick = () => {
+    gMode = "drill";
+    gLoop = true;
+    $("mode-drill").classList.add("on");
+    $("mode-full").classList.remove("on");
+    $("btn-guide-loop").classList.add("on");
+    stopAudio();
+  };
+  $("mode-full").onclick = () => {
+    gMode = "full";
+    gLoop = false;
+    $("mode-full").classList.add("on");
+    $("mode-drill").classList.remove("on");
+    $("btn-guide-loop").classList.remove("on");
+    stopAudio();
+  };
+
+  $("btn-guide-prev").onclick = () => guideGo(-1);
+  $("btn-guide-next").onclick = () => guideGo(1);
+  $("btn-guide-play").onclick = () => toggleGuidePlay();
+  $("btn-guide-loop").onclick = () => {
+    gLoop = !gLoop;
+    $("btn-guide-loop").classList.toggle("on", gLoop);
+  };
+  $("btn-guide-speed").onclick = () => {
+    gSpeedIdx = (gSpeedIdx + 1) % SPEEDS.length;
+    audioEl().playbackRate = SPEEDS[gSpeedIdx];
+    updateGuideChrome();
+  };
+  $("btn-guide-record").onclick = () => toggleGuideRecord();
+  $("btn-guide-replay-me").onclick = () => replayMe();
+
+  $("btn-dict-close").onclick = () => closeDict();
+  $("dict-backdrop").onclick = () => closeDict();
+  $("btn-dict-speak").onclick = () => speakDict();
+  $("btn-dict-save").onclick = () => saveDictTerm();
+
+  $("btn-back").onclick = () => { stopAudio(); showView("home"); renderHome(); };
   $("btn-back-weak").onclick = () => showView("home");
   $("btn-back-install").onclick = () => showView("home");
-  $("btn-install-help").onclick = () => showView("install");
-  $("btn-weak").onclick = () => { renderWeak(); showView("weak"); };
+  $("btn-back-vocab").onclick = () => showView("home");
   $("btn-clear-weak").onclick = () => {
     if (confirm("清空弱项词本？")) {
       state.weakWords = {};
@@ -508,39 +962,44 @@ function bind() {
     $("zh-text").classList.toggle("hidden", !showZh);
     $("btn-toggle-zh").textContent = showZh ? "中" : "英";
   };
-  $("btn-prev").onclick = () => go(-1);
-  $("btn-next").onclick = () => go(1);
-  $("btn-play").onclick = () => pausePlay();
-  $("btn-loop").onclick = () => { loopOn = !loopOn; renderPlayerMeta(); };
+  $("btn-prev").onclick = () => goPlayer(-1);
+  $("btn-next").onclick = () => goPlayer(1);
+  $("btn-play").onclick = () => togglePlayerPlay();
+  $("btn-loop").onclick = () => { qLoop = !qLoop; renderPlayer(); };
   $("btn-speed").onclick = () => {
-    speedIdx = (speedIdx + 1) % SPEEDS.length;
-    audioEl().playbackRate = SPEEDS[speedIdx];
-    renderPlayerMeta();
+    qSpeedIdx = (qSpeedIdx + 1) % SPEEDS.length;
+    audioEl().playbackRate = SPEEDS[qSpeedIdx];
+    renderPlayer();
   };
-  $("btn-listen").onclick = () => {
-    const s = current();
-    if (!s) return;
-    prog(s.id).listen += 1;
-    saveState();
-    playSentence();
-  };
-  $("btn-shadow").onclick = () => {
-    const s = current();
-    if (!s) return;
-    prog(s.id).shadow += 1;
-    saveState();
-    renderPlayerMeta();
-  };
-  $("btn-record").onclick = () => startRecord();
+  $("btn-record").onclick = () => togglePlayerRecord();
   $("btn-pass").onclick = () => markPass();
 
-  // Media Session for headset buttons when supported
-  if ("mediaSession" in navigator) {
-    navigator.mediaSession.setActionHandler("previoustrack", () => go(-1));
-    navigator.mediaSession.setActionHandler("nexttrack", () => go(1));
-    navigator.mediaSession.setActionHandler("play", () => playSentence());
-    navigator.mediaSession.setActionHandler("pause", () => pausePlay());
-  }
+  $("btn-flash-en").onclick = () => { vocabMode = "en2zh"; renderVocab(false); };
+  $("btn-flash-zh").onclick = () => { vocabMode = "zh2en"; renderVocab(false); };
+  $("btn-cloak").onclick = () => { vocabMode = "cloak"; renderVocab(false); };
+  $("btn-vocab-reveal").onclick = () => renderVocab(true);
+  $("btn-vocab-next").onclick = () => {
+    vocabIdx = (vocabIdx + 1) % vocabDeck.length;
+    renderVocab(false);
+  };
+  $("btn-vocab-weak").onclick = () => {
+    const card = vocabDeck[vocabIdx % vocabDeck.length];
+    if (!card) return;
+    const k = card.en.toLowerCase();
+    state.weakWords[k] = (state.weakWords[k] || 0) + 1;
+    saveState();
+  };
+}
+
+async function loadData() {
+  const [cRes, gRes, pRes] = await Promise.all([
+    fetch("./data/corpus.json"),
+    fetch("./data/scenic_guides/index.json"),
+    fetch("./data/phrase_patches.json"),
+  ]);
+  corpus = await cRes.json();
+  guidesIndex = await gRes.json();
+  if (pRes.ok) phrasePatches = await pRes.json();
 }
 
 async function registerSW() {
@@ -548,13 +1007,13 @@ async function registerSW() {
   try {
     await navigator.serviceWorker.register("./sw.js");
   } catch (e) {
-    console.warn("SW register failed", e);
+    console.warn("SW failed", e);
   }
 }
 
 async function main() {
   bind();
-  await loadCorpus();
+  await loadData();
   renderHome();
   registerSW();
   if (window.speechSynthesis) speechSynthesis.getVoices();
@@ -562,5 +1021,5 @@ async function main() {
 
 main().catch((e) => {
   console.error(e);
-  alert("加载语料失败，请用本地服务器打开 app 目录（见 README）。");
+  alert("加载失败，请用本地服务器打开（见 README）。");
 });

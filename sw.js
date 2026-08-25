@@ -1,5 +1,5 @@
-/* Service Worker — cache shell + corpus + seed audio for offline commute */
-const CACHE = "guide-shadow-v2";
+/* Service Worker — shell + guides index + seed audio */
+const CACHE = "guide-oral-v3";
 const PRECACHE = [
   "./",
   "./index.html",
@@ -9,34 +9,13 @@ const PRECACHE = [
   "./icons/icon-192.png",
   "./icons/icon-512.png",
   "./data/corpus.json",
-];
-
-const SEED_AUDIO = [
-  "./audio/scenic_qa/scenic_qa-q01-s01.mp3",
-  "./audio/scenic_qa/scenic_qa-q01-s02.mp3",
-  "./audio/scenic_qa/scenic_qa-q01-s03.mp3",
-  "./audio/scenic_qa/scenic_qa-q02-s01.mp3",
-  "./audio/scenic_qa/scenic_qa-q02-s02.mp3",
-  "./audio/scenic_qa/scenic_qa-q03-s01.mp3",
-  "./audio/scenic_qa/scenic_qa-q03-s02.mp3",
-  "./audio/scenic_qa/scenic_qa-q03-s03.mp3",
-  "./audio/service_norms/service_norms-welcome-s01.mp3",
-  "./audio/service_norms/service_norms-welcome-s02.mp3",
-  "./audio/service_norms/service_norms-welcome-s03.mp3",
-  "./audio/service_norms/service_norms-welcome-s04.mp3",
-  "./audio/service_norms/service_norms-welcome-s05.mp3",
-  "./audio/service_norms/service_norms-welcome-s06.mp3",
-  "./audio/service_norms/service_norms-welcome-s07.mp3",
-  "./audio/service_norms/service_norms-welcome-s08.mp3",
-  "./audio/service_norms/service_norms-welcome-s09.mp3",
+  "./data/scenic_guides/index.json",
+  "./data/phrase_patches.json",
 ];
 
 self.addEventListener("install", (event) => {
   event.waitUntil(
-    caches.open(CACHE).then(async (cache) => {
-      await cache.addAll(PRECACHE);
-      await Promise.allSettled(SEED_AUDIO.map((u) => cache.add(u)));
-    }).then(() => self.skipWaiting())
+    caches.open(CACHE).then((cache) => cache.addAll(PRECACHE)).then(() => self.skipWaiting())
   );
 });
 
@@ -55,7 +34,13 @@ self.addEventListener("fetch", (event) => {
     caches.match(req).then((cached) => {
       const fetched = fetch(req)
         .then((res) => {
-          if (res.ok && (req.url.includes("/audio/") || req.url.includes("corpus.json"))) {
+          if (
+            res.ok &&
+            (req.url.includes("/audio/") ||
+              req.url.includes("corpus.json") ||
+              req.url.includes("scenic_guides") ||
+              req.url.includes("phrase_patches"))
+          ) {
             const clone = res.clone();
             caches.open(CACHE).then((c) => c.put(req, clone));
           }

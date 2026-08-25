@@ -6,34 +6,135 @@
   <meta name="theme-color" content="#0f172a" />
   <meta name="apple-mobile-web-app-capable" content="yes" />
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
-  <meta name="apple-mobile-web-app-title" content="影子跟读" />
+  <meta name="apple-mobile-web-app-title" content="导游口语" />
   <link rel="manifest" href="manifest.webmanifest" />
   <link rel="apple-touch-icon" href="icons/icon-192.png" />
-  <title>导游英语影子跟读</title>
+  <title>导游英语口语 · 五景点讲解</title>
   <link rel="stylesheet" href="styles.css" />
 </head>
 <body>
   <div id="app">
+    <!-- HOME -->
     <section id="view-home" class="view active">
       <header class="top">
-        <h1>影子跟读</h1>
-        <p class="sub">广东导游英语口试 · 通勤 100LS</p>
+        <h1>导游英语口语</h1>
+        <p class="sub">先啃五景点讲解 · 广东口试核心</p>
       </header>
-      <div class="today-card">
+
+      <div class="today-card" id="continue-card">
         <div class="today-row">
-          <span>今日过关</span>
-          <strong id="today-goal">0 / 20 句</strong>
+          <span>今日听 / 跟</span>
+          <strong id="today-goal">听 0 · 跟 0</strong>
         </div>
         <div class="bar"><i id="today-bar"></i></div>
-        <p class="hint">早高峰听跟 · 晚高峰录音过关</p>
+        <button type="button" class="btn continue hidden" id="btn-continue">继续上次</button>
+        <p class="hint" id="continue-hint">打开任一景点，逐句听跟</p>
       </div>
-      <div class="module-grid" id="module-grid"></div>
+
+      <section class="home-block">
+        <div class="block-head">
+          <h2>景点讲解</h2>
+          <p>口试核心 · 约 8 分钟/篇</p>
+        </div>
+        <div class="spot-list" id="spot-list"></div>
+      </section>
+
+      <section class="home-block bank-block">
+        <button type="button" class="bank-toggle" id="btn-bank-toggle" aria-expanded="false">
+          <span>
+            <strong>题库精练</strong>
+            <em>配合讲解 · 问答 / 规范 / 应变 / 综知 / 口译</em>
+          </span>
+          <span class="chev" id="bank-chev">›</span>
+        </button>
+        <div class="module-grid collapsed" id="module-grid"></div>
+      </section>
+
       <div class="home-actions">
-        <button type="button" class="btn ghost" id="btn-install-help">如何添加到主屏幕</button>
+        <button type="button" class="btn ghost" id="btn-vocab">主动词汇本</button>
         <button type="button" class="btn ghost" id="btn-weak">弱项词本</button>
+        <button type="button" class="btn ghost" id="btn-install-help">如何添加到主屏幕</button>
       </div>
     </section>
 
+    <!-- GUIDE READER -->
+    <section id="view-guide" class="view">
+      <header class="top compact sticky-top">
+        <button type="button" class="icon-btn" id="btn-guide-back" aria-label="返回">←</button>
+        <div class="top-mid">
+          <h2 id="guide-title">讲解</h2>
+          <p id="guide-sub" class="strategy"></p>
+        </div>
+        <button type="button" class="icon-btn" id="btn-guide-menu" aria-label="停点目录">☰</button>
+      </header>
+
+      <div class="guide-meta">
+        <div class="mode-tabs" role="tablist">
+          <button type="button" class="mode-tab on" id="mode-drill" data-mode="drill">逐句突破</button>
+          <button type="button" class="mode-tab" id="mode-full" data-mode="full">整篇连播</button>
+        </div>
+        <div class="progress-line">
+          <span id="guide-pos">1 / 1</span>
+          <span id="guide-ls">听 0 · 跟 0</span>
+        </div>
+      </div>
+
+      <div class="anchor-card hidden" id="anchor-card">
+        <p class="anchor-hook" id="anchor-hook"></p>
+        <p class="anchor-must" id="anchor-must"></p>
+      </div>
+
+      <div class="reader" id="guide-reader"></div>
+
+      <div class="guide-dock">
+        <div class="transport">
+          <button type="button" class="ctrl" id="btn-guide-prev" aria-label="上一句">⏮</button>
+          <button type="button" class="ctrl main" id="btn-guide-play" aria-label="播放">▶</button>
+          <button type="button" class="ctrl" id="btn-guide-next" aria-label="下一句">⏭</button>
+        </div>
+        <div class="toolbar">
+          <button type="button" class="chip on" id="btn-guide-loop">循环本句</button>
+          <button type="button" class="chip" id="btn-guide-speed">1.0x</button>
+          <button type="button" class="chip" id="btn-guide-record">跟读</button>
+          <button type="button" class="chip hidden" id="btn-guide-replay-me">回听我的</button>
+        </div>
+        <p class="mic-hint" id="guide-mic-hint">点跟读开始录，再点停止；听次数在范读播完后自动 +1</p>
+      </div>
+    </section>
+
+    <!-- STOPS DRAWER -->
+    <div class="drawer hidden" id="stops-drawer">
+      <div class="drawer-backdrop" id="stops-backdrop"></div>
+      <div class="drawer-panel">
+        <header class="drawer-head">
+          <h3>停点目录</h3>
+          <button type="button" class="icon-btn" id="btn-stops-close">✕</button>
+        </header>
+        <ul class="stops-ul" id="stops-ul"></ul>
+      </div>
+    </div>
+
+    <!-- DICT SHEET -->
+    <div class="sheet hidden" id="dict-sheet">
+      <div class="sheet-backdrop" id="dict-backdrop"></div>
+      <div class="sheet-panel" id="dict-panel">
+        <div class="sheet-grab"></div>
+        <header class="sheet-head">
+          <div>
+            <h3 id="dict-word">—</h3>
+            <p class="dict-ipa" id="dict-ipa"></p>
+          </div>
+          <div class="sheet-actions">
+            <button type="button" class="chip" id="btn-dict-speak">朗读</button>
+            <button type="button" class="chip" id="btn-dict-save">收藏</button>
+            <button type="button" class="icon-btn" id="btn-dict-close">✕</button>
+          </div>
+        </header>
+        <div class="dict-body" id="dict-body"></div>
+      </div>
+    </div>
+
+    <!-- LEGACY PLAYER (题库) -->
     <section id="view-player" class="view">
       <header class="top compact">
         <button type="button" class="icon-btn" id="btn-back" aria-label="返回">←</button>
@@ -72,15 +173,37 @@
       <div class="toolbar">
         <button type="button" class="chip" id="btn-loop">循环本句</button>
         <button type="button" class="chip" id="btn-speed">1.0x</button>
-        <button type="button" class="chip" id="btn-listen">+听一遍</button>
-        <button type="button" class="chip" id="btn-shadow">+跟一遍</button>
       </div>
 
       <div class="record-row">
-        <button type="button" class="btn record" id="btn-record">🎤 跟读纠音</button>
+        <button type="button" class="btn record" id="btn-record">跟读</button>
         <button type="button" class="btn pass" id="btn-pass">✓ 本句过关</button>
       </div>
-      <p class="mic-hint" id="mic-hint">录音后用语音识别对比标准句，标出弱项词</p>
+      <p class="mic-hint" id="mic-hint">录音回听自查（不做纠音评分）</p>
+    </section>
+
+    <!-- VOCAB DRILLS -->
+    <section id="view-vocab" class="view">
+      <header class="top compact">
+        <button type="button" class="icon-btn" id="btn-back-vocab">←</button>
+        <h2>主动词汇</h2>
+        <span></span>
+      </header>
+      <p class="hint pad">从讲解收藏与 Must-say 抽练：遮句复述 / 中英闪卡</p>
+      <div class="vocab-modes">
+        <button type="button" class="mod" id="btn-flash-en">英 → 中 闪卡</button>
+        <button type="button" class="mod" id="btn-flash-zh">中 → 英 闪卡</button>
+        <button type="button" class="mod" id="btn-cloak">遮句复述</button>
+      </div>
+      <article class="sentence-card vocab-card" id="vocab-card">
+        <p class="en" id="vocab-front">先点上方模式开始</p>
+        <p class="zh hidden" id="vocab-back"></p>
+      </article>
+      <div class="toolbar">
+        <button type="button" class="chip" id="btn-vocab-reveal">显示答案</button>
+        <button type="button" class="chip" id="btn-vocab-next">下一张</button>
+        <button type="button" class="chip" id="btn-vocab-weak">标为弱项</button>
+      </div>
     </section>
 
     <section id="view-weak" class="view">
@@ -90,7 +213,7 @@
         <button type="button" class="icon-btn" id="btn-clear-weak" title="清空">🗑</button>
       </header>
       <ul class="weak-ul" id="weak-ul"></ul>
-      <p class="empty" id="weak-empty">暂无弱项，多录音纠音后会出现在这里。</p>
+      <p class="empty" id="weak-empty">暂无弱项。查词收藏或闪卡「标为弱项」会出现在这里。</p>
     </section>
 
     <section id="view-install" class="view">
@@ -116,6 +239,7 @@
     </section>
   </div>
   <audio id="audio" preload="auto"></audio>
+  <audio id="audio-me" preload="auto"></audio>
   <script src="app.js" type="module"></script>
 </body>
 </html>

@@ -1,0 +1,378 @@
+{
+  "id": "sun-yat-sen-hall",
+  "titleZh": "中山纪念堂",
+  "titleEn": "Sun Yat-sen Memorial Hall",
+  "blurb": "生平主线 · 吕彦直 · 无柱声学",
+  "targetMinutes": 8,
+  "stops": [
+    {
+      "id": "stop-0",
+      "title": "### Opening",
+      "sceneHook": "### Opening",
+      "sentenceStart": 0,
+      "sentenceEnd": 1,
+      "mustSay": [
+        "Xing Zhong Hui",
+        "Tong Meng Hui",
+        "1911 Revolution"
+      ]
+    },
+    {
+      "id": "stop-1",
+      "title": "Stop A: Why this hall stands here",
+      "sceneHook": "奠基 / 建堂说明",
+      "sentenceStart": 2,
+      "sentenceEnd": 5,
+      "mustSay": []
+    },
+    {
+      "id": "stop-2",
+      "title": "Stop B: Sun Yat-sen’s life — the story behind the roof",
+      "sceneHook": "生平浮雕 / 展板",
+      "sentenceStart": 6,
+      "sentenceEnd": 20,
+      "mustSay": []
+    },
+    {
+      "id": "stop-3",
+      "title": "Stop C: The exterior — Chinese palace, modern bones",
+      "sceneHook": "八角外观仰拍点",
+      "sentenceStart": 21,
+      "sentenceEnd": 22,
+      "mustSay": []
+    },
+    {
+      "id": "stop-4",
+      "title": "Stop D: The architect — Lu Yanzhi",
+      "sceneHook": "吕彦直介绍牌",
+      "sentenceStart": 23,
+      "sentenceEnd": 24,
+      "mustSay": []
+    },
+    {
+      "id": "stop-5",
+      "title": "Stop E: Inside — 3,238 seats, no blocking pillars",
+      "sceneHook": "大堂座席中央",
+      "sentenceStart": 25,
+      "sentenceEnd": 29,
+      "mustSay": []
+    },
+    {
+      "id": "stop-6",
+      "title": "Closing",
+      "sceneHook": "大厅出口",
+      "sentenceStart": 30,
+      "sentenceEnd": 32,
+      "mustSay": [
+        "Lu Yanzhi",
+        "3,238 seats"
+      ]
+    }
+  ],
+  "sentences": [
+    {
+      "id": "sun-yat-sen-hall-s01",
+      "en": "Good morning, ladies and gentlemen.",
+      "zh": "各位早上好。",
+      "stopId": "stop-0",
+      "focusPhrases": [
+        "Sun Yat-sen Memorial Hall"
+      ],
+      "audio": "audio/scenic_guides/sun-yat-sen-hall/sun-yat-sen-hall-s01.mp3"
+    },
+    {
+      "id": "sun-yat-sen-hall-s02",
+      "en": "Welcome to the Sun Yat-sen Memorial Hall in Guangzhou — a landmark of China’s democratic revolution and a masterpiece of modern Chinese architecture.",
+      "zh": "欢迎来到广州中山纪念堂——中国民主革命的地标，也是中国近代建筑的杰作。",
+      "stopId": "stop-0",
+      "focusPhrases": [],
+      "audio": "audio/scenic_guides/sun-yat-sen-hall/sun-yat-sen-hall-s02.mp3"
+    },
+    {
+      "id": "sun-yat-sen-hall-s03",
+      "en": "Sun Yat-sen was the forerunner of the Chinese bourgeois democratic revolution.",
+      "zh": "孙中山是中国资产阶级民主革命的先行者。",
+      "stopId": "stop-1",
+      "focusPhrases": [
+        "1911 Revolution",
+        "1929–1931",
+        "presidential house of the South Revolutionary Government",
+        "October 1931"
+      ],
+      "audio": "audio/scenic_guides/sun-yat-sen-hall/sun-yat-sen-hall-s03.mp3"
+    },
+    {
+      "id": "sun-yat-sen-hall-s04",
+      "en": "He devoted his life to that cause; the 1911 Revolution he led ended the feudal monarchy that had lasted for thousands of years.",
+      "zh": "他把一生献给了这项事业；他所领导的辛亥革命，结束了延续数千年的封建帝制。",
+      "stopId": "stop-1",
+      "focusPhrases": [],
+      "audio": "audio/scenic_guides/sun-yat-sen-hall/sun-yat-sen-hall-s04.mp3"
+    },
+    {
+      "id": "sun-yat-sen-hall-s05",
+      "en": "To commemorate his contributions, the people of Guangzhou built this hall in 1929–1931 on the original site of the former presidential house of the South Revolutionary Government.",
+      "zh": "为纪念他的贡献，广州人民于一九二九至一九三一年，在原南方革命政府总统府旧址上建造了这座纪念堂。",
+      "stopId": "stop-1",
+      "focusPhrases": [],
+      "audio": "audio/scenic_guides/sun-yat-sen-hall/sun-yat-sen-hall-s05.mp3"
+    },
+    {
+      "id": "sun-yat-sen-hall-s06",
+      "en": "Construction was completed in October 1931.",
+      "zh": "工程于一九三一年十月竣工。",
+      "stopId": "stop-1",
+      "focusPhrases": [],
+      "audio": "audio/scenic_guides/sun-yat-sen-hall/sun-yat-sen-hall-s06.mp3"
+    },
+    {
+      "id": "sun-yat-sen-hall-s07",
+      "en": "Childhood and resolve.",
+      "zh": "童年与立志。",
+      "stopId": "stop-2",
+      "focusPhrases": [
+        "Childhood and resolve.",
+        "November 12, 1866",
+        "Cuiheng Village",
+        "twelve",
+        "Christianity and democracy"
+      ],
+      "audio": "audio/scenic_guides/sun-yat-sen-hall/sun-yat-sen-hall-s07.mp3"
+    },
+    {
+      "id": "sun-yat-sen-hall-s08",
+      "en": "He was born on November 12, 1866, in a farmer’s family in Cuiheng Village, Xiangshan County — today’s Zhongshan City.",
+      "zh": "他生于一八六六年十一月十二日，广东香山县翠亨村的一个农民家庭——也就是今天的中山市。",
+      "stopId": "stop-2",
+      "focusPhrases": [],
+      "audio": "audio/scenic_guides/sun-yat-sen-hall/sun-yat-sen-hall-s08.mp3"
+    },
+    {
+      "id": "sun-yat-sen-hall-s09",
+      "en": "At twelve he went to Honolulu, where his elder brother sent him to a missionary school.",
+      "zh": "十二岁时前往檀香山，兄长送他进教会学校读书。",
+      "stopId": "stop-2",
+      "focusPhrases": [],
+      "audio": "audio/scenic_guides/sun-yat-sen-hall/sun-yat-sen-hall-s09.mp3"
+    },
+    {
+      "id": "sun-yat-sen-hall-s10",
+      "en": "Later he studied Western medicine in Hong Kong and practiced in Guangzhou and Macao.",
+      "zh": "后来他在香港学习西医，并在广州和澳门行医。",
+      "stopId": "stop-2",
+      "focusPhrases": [],
+      "audio": "audio/scenic_guides/sun-yat-sen-hall/sun-yat-sen-hall-s10.mp3"
+    },
+    {
+      "id": "sun-yat-sen-hall-s11",
+      "en": "Ever since childhood he was influenced by Western ideas of Christianity and democracy, and he made up his mind to cure the ills of old feudal China and turn it into a democratic, strong nation.",
+      "zh": "自幼受到西方基督教与民主思想影响，他立志医治旧中国的弊病，把它变成一个民主、强盛的国家。",
+      "stopId": "stop-2",
+      "focusPhrases": [],
+      "audio": "audio/scenic_guides/sun-yat-sen-hall/sun-yat-sen-hall-s11.mp3"
+    },
+    {
+      "id": "sun-yat-sen-hall-s12",
+      "en": "From reform to revolution.",
+      "zh": "从改良到革命。",
+      "stopId": "stop-2",
+      "focusPhrases": [],
+      "audio": "audio/scenic_guides/sun-yat-sen-hall/sun-yat-sen-hall-s12.mp3"
+    },
+    {
+      "id": "sun-yat-sen-hall-s13",
+      "en": "At first he still had illusions about the Qing government and hoped to save the moribund regime through reforms.",
+      "zh": "起初他对清政府仍抱幻想，希望通过改良挽救这个垂死的政权。",
+      "stopId": "stop-2",
+      "focusPhrases": [],
+      "audio": "audio/scenic_guides/sun-yat-sen-hall/sun-yat-sen-hall-s13.mp3"
+    },
+    {
+      "id": "sun-yat-sen-hall-s14",
+      "en": "But China’s defeats by foreign invaders and the corruption and incompetence of the Qing court intensified his patriotic indignation.",
+      "zh": "但中国在外敌面前接连失败，加上清廷腐败无能，使他的爱国义愤日益强烈。",
+      "stopId": "stop-2",
+      "focusPhrases": [],
+      "audio": "audio/scenic_guides/sun-yat-sen-hall/sun-yat-sen-hall-s14.mp3"
+    },
+    {
+      "id": "sun-yat-sen-hall-s15",
+      "en": "He decided the Qing was rotten to the core and must be overthrown and replaced by a democratic republic.",
+      "zh": "他断定清朝已烂到根子上，必须推翻，代之以民主共和国。",
+      "stopId": "stop-2",
+      "focusPhrases": [],
+      "audio": "audio/scenic_guides/sun-yat-sen-hall/sun-yat-sen-hall-s15.mp3"
+    },
+    {
+      "id": "sun-yat-sen-hall-s16",
+      "en": "Organizing the struggle.",
+      "zh": "组织斗争。",
+      "stopId": "stop-2",
+      "focusPhrases": [],
+      "audio": "audio/scenic_guides/sun-yat-sen-hall/sun-yat-sen-hall-s16.mp3"
+    },
+    {
+      "id": "sun-yat-sen-hall-s17",
+      "en": "In 1894 in Honolulu, he founded the first Chinese bourgeois revolutionary organization — the Society for the Revival of China (Xing Zhong Hui).",
+      "zh": "一八九四年，他在檀香山创立了中国第一个资产阶级革命团体——兴中会 Xing Zhong Hui。",
+      "stopId": "stop-2",
+      "focusPhrases": [],
+      "audio": "audio/scenic_guides/sun-yat-sen-hall/sun-yat-sen-hall-s17.mp3"
+    },
+    {
+      "id": "sun-yat-sen-hall-s18",
+      "en": "The following spring he returned and staged the first armed uprising against the Qing in Guangzhou, but it failed.",
+      "zh": "次年春天他回国，在广州发动第一次反清武装起义，但失败了。",
+      "stopId": "stop-2",
+      "focusPhrases": [],
+      "audio": "audio/scenic_guides/sun-yat-sen-hall/sun-yat-sen-hall-s18.mp3"
+    },
+    {
+      "id": "sun-yat-sen-hall-s19",
+      "en": "In 1905 in Japan, he founded China’s first political party, the China Revolutionary League (Tong Meng Hui), later the Nationalist Party (Guomintang).",
+      "zh": "一九〇五年在日本，他创立了中国第一个政党——中国同盟会 Tong Meng Hui，后来发展为国民党 Guomintang。",
+      "stopId": "stop-2",
+      "focusPhrases": [],
+      "audio": "audio/scenic_guides/sun-yat-sen-hall/sun-yat-sen-hall-s19.mp3"
+    },
+    {
+      "id": "sun-yat-sen-hall-s20",
+      "en": "After successive attempts, success came with the Wuchang Uprising in October 1911.",
+      "zh": "经过多次尝试，一九一一年十月武昌起义终于成功。",
+      "stopId": "stop-2",
+      "focusPhrases": [],
+      "audio": "audio/scenic_guides/sun-yat-sen-hall/sun-yat-sen-hall-s20.mp3"
+    },
+    {
+      "id": "sun-yat-sen-hall-s21",
+      "en": "The Qing fell, and he was elected provisional president of the interim government of the Republic of China.",
+      "zh": "清朝覆灭，他当选为中华民国临时政府临时大总统。",
+      "stopId": "stop-2",
+      "focusPhrases": [],
+      "audio": "audio/scenic_guides/sun-yat-sen-hall/sun-yat-sen-hall-s21.mp3"
+    },
+    {
+      "id": "sun-yat-sen-hall-s22",
+      "en": "The hall is an octagonal, palace-like reinforced concrete structure, 58 meters high, with about 12,000 square meters of floor space.",
+      "zh": "纪念堂是一座八角形、宫殿式钢筋混凝土建筑，高五十八米，建筑面积约一万二千平方米。",
+      "stopId": "stop-3",
+      "focusPhrases": [
+        "octagonal",
+        "reinforced concrete",
+        "58 meters",
+        "12,000 square meters"
+      ],
+      "audio": "audio/scenic_guides/sun-yat-sen-hall/sun-yat-sen-hall-s22.mp3"
+    },
+    {
+      "id": "sun-yat-sen-hall-s23",
+      "en": "It looks like a traditional Chinese palace in appearance, but was built with the newest techniques of its time.",
+      "zh": "外观像传统中国宫殿，却采用了当时最新的建造技术。",
+      "stopId": "stop-3",
+      "focusPhrases": [],
+      "audio": "audio/scenic_guides/sun-yat-sen-hall/sun-yat-sen-hall-s23.mp3"
+    },
+    {
+      "id": "sun-yat-sen-hall-s24",
+      "en": "It was designed by a young Chinese architect, Lu Yanzhi: born in Tianjin, graduated from Tsinghua (Qinghua) University in Beijing, later studied architecture at Cornell University in the USA.",
+      "zh": "设计者是年轻的中国建筑师吕彦直 Lu Yanzhi：生于天津，毕业于北京清华大学，后赴美国康奈尔大学学习建筑。",
+      "stopId": "stop-4",
+      "focusPhrases": [
+        "Lu Yanzhi",
+        "Cornell University",
+        "1929",
+        "36"
+      ],
+      "audio": "audio/scenic_guides/sun-yat-sen-hall/sun-yat-sen-hall-s24.mp3"
+    },
+    {
+      "id": "sun-yat-sen-hall-s25",
+      "en": "He died of lung cancer in 1929, at only 36, before the hall was completed.",
+      "zh": "一九二九年他因肺癌去世，年仅三十六岁，未能看到纪念堂落成。",
+      "stopId": "stop-4",
+      "focusPhrases": [],
+      "audio": "audio/scenic_guides/sun-yat-sen-hall/sun-yat-sen-hall-s25.mp3"
+    },
+    {
+      "id": "sun-yat-sen-hall-s26",
+      "en": "Please walk into the great hall.",
+      "zh": "请走进大堂。",
+      "stopId": "stop-5",
+      "focusPhrases": [
+        "3,238",
+        "no supporting pillar",
+        "four long-spanned steel trusses",
+        "eight pillars",
+        "hidden in the walls"
+      ],
+      "audio": "audio/scenic_guides/sun-yat-sen-hall/sun-yat-sen-hall-s26.mp3"
+    },
+    {
+      "id": "sun-yat-sen-hall-s27",
+      "en": "It seats 3,238 people.",
+      "zh": "这里可容纳三千二百三十八人。",
+      "stopId": "stop-5",
+      "focusPhrases": [],
+      "audio": "audio/scenic_guides/sun-yat-sen-hall/sun-yat-sen-hall-s27.mp3"
+    },
+    {
+      "id": "sun-yat-sen-hall-s28",
+      "en": "From almost any seat you see no supporting pillar blocking your view.",
+      "zh": "几乎从任何一个座位望去，都看不到遮挡视线的支撑柱。",
+      "stopId": "stop-5",
+      "focusPhrases": [],
+      "audio": "audio/scenic_guides/sun-yat-sen-hall/sun-yat-sen-hall-s28.mp3"
+    },
+    {
+      "id": "sun-yat-sen-hall-s29",
+      "en": "The huge domed roof is held by four long-spanned steel trusses; the eight pillars sustaining them are hidden in the walls.",
+      "zh": "巨大的穹顶由四榀大跨度钢桁架托起；支撑它们的八根柱子藏在墙体之中。",
+      "stopId": "stop-5",
+      "focusPhrases": [],
+      "audio": "audio/scenic_guides/sun-yat-sen-hall/sun-yat-sen-hall-s29.mp3"
+    },
+    {
+      "id": "sun-yat-sen-hall-s30",
+      "en": "The acoustics are excellent — no annoying echo — so every speech and performance carries clearly.",
+      "zh": "声学效果极佳——没有恼人的回声——所以每次演讲和演出都清晰可闻。",
+      "stopId": "stop-5",
+      "focusPhrases": [],
+      "audio": "audio/scenic_guides/sun-yat-sen-hall/sun-yat-sen-hall-s30.mp3"
+    },
+    {
+      "id": "sun-yat-sen-hall-s31",
+      "en": "Remember three layers: the man (Cuiheng → Xing Zhong Hui → Tong Meng Hui → 1911), the shell (octagon, 58 meters, Lu Yanzhi), and the hall (3,238 seats, hidden pillars, perfect sound).",
+      "zh": "记住三个层次：人（翠亨 → 兴中会 → 同盟会 → 一九一一年）、壳（八角、五十八米、吕彦直）、堂（三千二百三十八席、隐柱、完美音效）。",
+      "stopId": "stop-6",
+      "focusPhrases": [
+        "man",
+        "shell",
+        "hall"
+      ],
+      "audio": "audio/scenic_guides/sun-yat-sen-hall/sun-yat-sen-hall-s31.mp3"
+    },
+    {
+      "id": "sun-yat-sen-hall-s32",
+      "en": "That covers both the scenic Q&A and the interpretation passages on this site.",
+      "zh": "这样，这个景点的问答和口译段落就都覆盖到了。",
+      "stopId": "stop-6",
+      "focusPhrases": [],
+      "audio": "audio/scenic_guides/sun-yat-sen-hall/sun-yat-sen-hall-s32.mp3"
+    },
+    {
+      "id": "sun-yat-sen-hall-s33",
+      "en": "I’m ready for your questions.",
+      "zh": "欢迎大家提问。",
+      "stopId": "stop-6",
+      "focusPhrases": [],
+      "audio": "audio/scenic_guides/sun-yat-sen-hall/sun-yat-sen-hall-s33.mp3"
+    }
+  ],
+  "mustSay": [
+    "Xing Zhong Hui",
+    "Tong Meng Hui",
+    "1911 Revolution",
+    "Lu Yanzhi",
+    "3,238 seats"
+  ]
+}

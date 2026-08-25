@@ -1,0 +1,383 @@
+{
+  "id": "chen-family-temple",
+  "titleZh": "陈家祠",
+  "titleEn": "Chen Family Temple",
+  "blurb": "礼制明珠 · 爵禄封侯 · 六类工艺 · 舜帝",
+  "targetMinutes": 8,
+  "stops": [
+    {
+      "id": "stop-0",
+      "title": "### Opening",
+      "sceneHook": "### Opening",
+      "sentenceStart": 0,
+      "sentenceEnd": 2,
+      "mustSay": [
+        "Pearl of Lingnan Artistic Architecture",
+        "Chen Botao / tanhua",
+        "Jue Lu Feng Hou"
+      ]
+    },
+    {
+      "id": "stop-1",
+      "title": "Stop A: Three functions, one pearl",
+      "sceneHook": "总览 · 三功能说明",
+      "sentenceStart": 3,
+      "sentenceEnd": 8,
+      "mustSay": []
+    },
+    {
+      "id": "stop-2",
+      "title": "Stop 1: Main entrance — drums, “titles and salaries,” brick stories, door-gods",
+      "sceneHook": "正门石鼓 · 砖雕 · 门神",
+      "sentenceStart": 9,
+      "sentenceEnd": 18,
+      "mustSay": []
+    },
+    {
+      "id": "stop-3",
+      "title": "Stop 2: “The Advent of Good Fortune”",
+      "sceneHook": "倒福木雕",
+      "sentenceStart": 19,
+      "sentenceEnd": 20,
+      "mustSay": []
+    },
+    {
+      "id": "stop-4",
+      "title": "Stop 3: Lingnan fruits on the balusters",
+      "sceneHook": "栏杆岭南佳果",
+      "sentenceStart": 21,
+      "sentenceEnd": 21,
+      "mustSay": []
+    },
+    {
+      "id": "stop-5",
+      "title": "Stop 4: Hen, chicks, and banana leaves — “great property”",
+      "sceneHook": "芭蕉鸡群图",
+      "sentenceStart": 22,
+      "sentenceEnd": 23,
+      "mustSay": []
+    },
+    {
+      "id": "stop-6",
+      "title": "Stop 5: A picture that encourages lifelong study",
+      "sceneHook": "励志图",
+      "sentenceStart": 24,
+      "sentenceEnd": 25,
+      "mustSay": []
+    },
+    {
+      "id": "stop-7",
+      "title": "Stop 6: The rear hall — Emperor Shun at the top",
+      "sceneHook": "后堂舜帝神位",
+      "sentenceStart": 26,
+      "sentenceEnd": 27,
+      "mustSay": []
+    },
+    {
+      "id": "stop-8",
+      "title": "Closing",
+      "sceneHook": "祠堂出口",
+      "sentenceStart": 28,
+      "sentenceEnd": 31,
+      "mustSay": [
+        "six crafts",
+        "Emperor Shun"
+      ]
+    }
+  ],
+  "sentences": [
+    {
+      "id": "chen-family-temple-s01",
+      "en": "Welcome, everyone.",
+      "zh": "欢迎各位。",
+      "stopId": "stop-0",
+      "focusPhrases": [
+        "Chen Family Temple",
+        "Chen Clan Academy",
+        "“Pearl of Lingnan Artistic Architecture”",
+        "ritual / institutional"
+      ],
+      "audio": "audio/scenic_guides/chen-family-temple/chen-family-temple-s01.mp3"
+    },
+    {
+      "id": "chen-family-temple-s02",
+      "en": "Today we visit the Chen Family Temple, also called the Chen Clan Academy — the “Pearl of Lingnan Artistic Architecture” in the heart of Guangzhou.",
+      "zh": "今天我们参观陈家祠，也称陈氏书院——广州城中心的“岭南建筑艺术明珠”。",
+      "stopId": "stop-0",
+      "focusPhrases": [],
+      "audio": "audio/scenic_guides/chen-family-temple/chen-family-temple-s02.mp3"
+    },
+    {
+      "id": "chen-family-temple-s03",
+      "en": "In the family of Lingnan buildings, it stands among the great ritual / institutional landmarks — alongside places like the Temple of the South China Sea God and Foshan Ancestral Temple — while Kaiping’s watchtowers represent world-heritage vernacular fortresses.",
+      "zh": "在岭南建筑大家族里，它与南海神庙、佛山祖庙等并列，属于重要的礼制建筑；而开平碉楼则代表世界遗产级的民间堡垒建筑。",
+      "stopId": "stop-0",
+      "focusPhrases": [],
+      "audio": "audio/scenic_guides/chen-family-temple/chen-family-temple-s03.mp3"
+    },
+    {
+      "id": "chen-family-temple-s04",
+      "en": "This place served as a shrine for sacrifices to the common ancestors of the Chen families; as a venue for clannish activities on festive and other special occasions; and as a school for Chen children — hence “Chen Clan Academy.”",
+      "zh": "这里既是陈姓各房祭祀共同祖先的祠堂，也是节庆等特殊场合举行宗族活动的场所，还是陈氏子弟读书的学堂——所以叫“陈氏书院”。",
+      "stopId": "stop-1",
+      "focusPhrases": [
+        "shrine",
+        "clannish activities",
+        "school"
+      ],
+      "audio": "audio/scenic_guides/chen-family-temple/chen-family-temple-s04.mp3"
+    },
+    {
+      "id": "chen-family-temple-s05",
+      "en": "In decoration it gathers the finest Guangdong folk arts and crafts.",
+      "zh": "装饰上，它汇集了广东民间工艺的精华。",
+      "stopId": "stop-1",
+      "focusPhrases": [],
+      "audio": "audio/scenic_guides/chen-family-temple/chen-family-temple-s05.mp3"
+    },
+    {
+      "id": "chen-family-temple-s06",
+      "en": "From roof to floor, inside and out — columns, eaves, ridges, stairs, doors and windows — you will find stone carvings, brick carvings, lime sculptures, ceramic figurines, wood carvings, and iron-cast artistic pieces.",
+      "zh": "从屋顶到地面，里里外外——柱、檐、脊、阶、门窗——都能见到石雕、砖雕、灰塑、陶塑、木雕和铸铁艺术品。",
+      "stopId": "stop-1",
+      "focusPhrases": [],
+      "audio": "audio/scenic_guides/chen-family-temple/chen-family-temple-s06.mp3"
+    },
+    {
+      "id": "chen-family-temple-s07",
+      "en": "Motifs carry meaning: the peony for richness and wealth, twin lotus flowers on one stalk for an affectionate couple, and the lion for power and dignity.",
+      "zh": "图案都有寓意：牡丹象征富贵，并蒂莲象征恩爱夫妻，狮子象征威严与权势。",
+      "stopId": "stop-1",
+      "focusPhrases": [],
+      "audio": "audio/scenic_guides/chen-family-temple/chen-family-temple-s07.mp3"
+    },
+    {
+      "id": "chen-family-temple-s08",
+      "en": "That is why it is called the Pearl of Lingnan Artistic Architecture.",
+      "zh": "因此它被称为岭南建筑艺术明珠。",
+      "stopId": "stop-1",
+      "focusPhrases": [],
+      "audio": "audio/scenic_guides/chen-family-temple/chen-family-temple-s08.mp3"
+    },
+    {
+      "id": "chen-family-temple-s09",
+      "en": "In 1959 it became the Guangdong Folk Art Museum (also called Guangzhou Folk Art Museum in English materials).",
+      "zh": "一九五九年，这里成为广东民间工艺博物馆（英文材料中也称广州民间工艺博物馆）。",
+      "stopId": "stop-1",
+      "focusPhrases": [],
+      "audio": "audio/scenic_guides/chen-family-temple/chen-family-temple-s09.mp3"
+    },
+    {
+      "id": "chen-family-temple-s10",
+      "en": "Please stop at the main entrance.",
+      "zh": "请在正门停一下。",
+      "stopId": "stop-2",
+      "focusPhrases": [
+        "main entrance"
+      ],
+      "audio": "audio/scenic_guides/chen-family-temple/chen-family-temple-s10.mp3"
+    },
+    {
+      "id": "chen-family-temple-s11",
+      "en": "Stone drums on both sides symbolize social status.",
+      "zh": "两侧的石鼓象征社会地位。",
+      "stopId": "stop-2",
+      "focusPhrases": [],
+      "audio": "audio/scenic_guides/chen-family-temple/chen-family-temple-s11.mp3"
+    },
+    {
+      "id": "chen-family-temple-s12",
+      "en": "In feudal Qing society, a family could place drums before the house only when someone had earned the degree of jinshi or higher.",
+      "zh": "在清代封建社会，只有家族中有人考取进士或更高功名，才能在门前摆放石鼓。",
+      "stopId": "stop-2",
+      "focusPhrases": [],
+      "audio": "audio/scenic_guides/chen-family-temple/chen-family-temple-s12.mp3"
+    },
+    {
+      "id": "chen-family-temple-s13",
+      "en": "Here there is a concrete story: in 1893 — the year before the temple was completed — a clansman named Chen Botao won the rank of tanhua (third place in the palace examination), and these drums were mounted in his honor.",
+      "zh": "这里有个具体故事：一八九三年——祠堂建成前一年——族人陈伯陶 Chen Botao 考中探花（殿试第三名），这些石鼓就是为他而立的。",
+      "stopId": "stop-2",
+      "focusPhrases": [],
+      "audio": "audio/scenic_guides/chen-family-temple/chen-family-temple-s13.mp3"
+    },
+    {
+      "id": "chen-family-temple-s14",
+      "en": "Please also notice, on the right-hand side behind the stone drum, a relief called “to be conferred a title of nobility” (Jue Lu Feng Hou).",
+      "zh": "请再看石鼓右侧后方的浮雕，叫“爵禄封侯” Jue Lu Feng Hou。",
+      "stopId": "stop-2",
+      "focusPhrases": [],
+      "audio": "audio/scenic_guides/chen-family-temple/chen-family-temple-s14.mp3"
+    },
+    {
+      "id": "chen-family-temple-s15",
+      "en": "A bird, a deer, a bee, and a monkey appear together: their Chinese names are homonyms for titles of nobility, official salary, and the granting of noble ranks — a wish that Chen descendants would win scholarly honors and high office.",
+      "zh": "雀、鹿、蜂、猴出现在一起：它们的中文名称与爵位、俸禄、封侯谐音——寄托陈氏子孙金榜题名、官运亨通的愿望。",
+      "stopId": "stop-2",
+      "focusPhrases": [],
+      "audio": "audio/scenic_guides/chen-family-temple/chen-family-temple-s15.mp3"
+    },
+    {
+      "id": "chen-family-temple-s16",
+      "en": "On the walls beside the gate, brick carvings depict different stories from Chinese historical novels — representative works of Guangdong brick-carving.",
+      "zh": "大门两侧墙上的砖雕，刻画了中国历史小说中的不同故事——是广东砖雕的代表作。",
+      "stopId": "stop-2",
+      "focusPhrases": [],
+      "audio": "audio/scenic_guides/chen-family-temple/chen-family-temple-s16.mp3"
+    },
+    {
+      "id": "chen-family-temple-s17",
+      "en": "On the door leaves are door-gods.",
+      "zh": "门扇上画着门神。",
+      "stopId": "stop-2",
+      "focusPhrases": [],
+      "audio": "audio/scenic_guides/chen-family-temple/chen-family-temple-s17.mp3"
+    },
+    {
+      "id": "chen-family-temple-s18",
+      "en": "The earliest were legendary Shentu and Yulei, said to catch ghosts and protect the house.",
+      "zh": "最早的门神是传说中的神荼和郁垒，据说能捉鬼护宅。",
+      "stopId": "stop-2",
+      "focusPhrases": [],
+      "audio": "audio/scenic_guides/chen-family-temple/chen-family-temple-s18.mp3"
+    },
+    {
+      "id": "chen-family-temple-s19",
+      "en": "In fancy armor, rope in hand, they look awe-inspiring.",
+      "zh": "他们身着华丽铠甲，手持绳索，威风凛凛。",
+      "stopId": "stop-2",
+      "focusPhrases": [],
+      "audio": "audio/scenic_guides/chen-family-temple/chen-family-temple-s19.mp3"
+    },
+    {
+      "id": "chen-family-temple-s20",
+      "en": "Notice an inverted character for happiness / good fortune (fu), often on the reverse of a wood-carving.",
+      "zh": "请注意一个倒着的“福”字，常出现在木雕背面。",
+      "stopId": "stop-3",
+      "focusPhrases": [
+        "happiness / good fortune",
+        "“the advent of good fortune”"
+      ],
+      "audio": "audio/scenic_guides/chen-family-temple/chen-family-temple-s20.mp3"
+    },
+    {
+      "id": "chen-family-temple-s21",
+      "en": "In Chinese, “inversion” and “advent” are homophones, so an upside-down fu means “the advent of good fortune” — happiness has arrived.",
+      "zh": "中文里“倒”与“到”谐音，所以倒福意味着“福到了”——幸福已经到来。",
+      "stopId": "stop-3",
+      "focusPhrases": [],
+      "audio": "audio/scenic_guides/chen-family-temple/chen-family-temple-s21.mp3"
+    },
+    {
+      "id": "chen-family-temple-s22",
+      "en": "At the tops of the balusters are carved southern fruits: peach, star-fruit (carambola), papaya, lychee, and so on — symbolic sacrificial offerings of the choicest Lingnan fruits to the Chen ancestors.",
+      "zh": "栏杆顶端雕着南方水果：桃、杨桃、木瓜、荔枝等——象征把最精美的岭南佳果献给陈氏祖先。",
+      "stopId": "stop-4",
+      "focusPhrases": [
+        "peach, star-fruit (carambola), papaya, lychee",
+        "sacrificial offerings"
+      ],
+      "audio": "audio/scenic_guides/chen-family-temple/chen-family-temple-s22.mp3"
+    },
+    {
+      "id": "chen-family-temple-s23",
+      "en": "Look at this picture: a hen and chicks foraging under a banana tree.",
+      "zh": "请看这幅图：母鸡带着小鸡在芭蕉树下觅食。",
+      "stopId": "stop-5",
+      "focusPhrases": [
+        "big leaves",
+        "“great property”",
+        "“great undertaking,”"
+      ],
+      "audio": "audio/scenic_guides/chen-family-temple/chen-family-temple-s23.mp3"
+    },
+    {
+      "id": "chen-family-temple-s24",
+      "en": "The chickens stand for the present generations; the banana’s big leaves (da ye) sound like “great property” or “great undertaking,” so they suggest the wealth and cause created by past generations.",
+      "zh": "鸡群代表今人；芭蕉的“大叶”与“大业”谐音，暗示先辈开创的财富与事业。",
+      "stopId": "stop-5",
+      "focusPhrases": [],
+      "audio": "audio/scenic_guides/chen-family-temple/chen-family-temple-s24.mp3"
+    },
+    {
+      "id": "chen-family-temple-s25",
+      "en": "Another picture suggests that a young man may learn quickly, but great learning takes years to shape — like the English proverb “Rome was not built in a day.” It encourages people to study with perennial efforts.",
+      "zh": "另一幅图暗示：年轻人或许学得快，但大学问需要经年累月才能成就——就像英语谚语“罗马不是一日建成的”。它鼓励人们持之以恒地学习。",
+      "stopId": "stop-6",
+      "focusPhrases": [
+        "“Rome was not built in a day.”",
+        "perennial efforts"
+      ],
+      "audio": "audio/scenic_guides/chen-family-temple/chen-family-temple-s25.mp3"
+    },
+    {
+      "id": "chen-family-temple-s26",
+      "en": "In a clan academy, this message fits perfectly: talent needs time.",
+      "zh": "在宗族书院里，这个道理再贴切不过：成才需要时间。",
+      "stopId": "stop-6",
+      "focusPhrases": [],
+      "audio": "audio/scenic_guides/chen-family-temple/chen-family-temple-s26.mp3"
+    },
+    {
+      "id": "chen-family-temple-s27",
+      "en": "Finally, the rear hall, where the Chen people worshiped their ancestors.",
+      "zh": "最后是后堂，陈氏族人在此祭祀祖先。",
+      "stopId": "stop-7",
+      "focusPhrases": [
+        "rear hall",
+        "Emperor Shun"
+      ],
+      "audio": "audio/scenic_guides/chen-family-temple/chen-family-temple-s27.mp3"
+    },
+    {
+      "id": "chen-family-temple-s28",
+      "en": "Tablets on the shrine were arranged by seniority; at the highest place was Emperor Shun, believed to be the remote ancestor of the Chen family, with later generations below.",
+      "zh": "神龛上的牌位按辈分排列；最高处是舜帝，被认为是陈氏远祖，后世列于其下。",
+      "stopId": "stop-7",
+      "focusPhrases": [],
+      "audio": "audio/scenic_guides/chen-family-temple/chen-family-temple-s28.mp3"
+    },
+    {
+      "id": "chen-family-temple-s29",
+      "en": "One pearl, three roles; at the gate — drums of Chen Botao the tanhua, the bird-deer-bee-monkey wish for rank and salary, brick stories and door-gods; inside — six crafts and peony-lotus-lion meanings, inverted fortune, Lingnan fruits, banana “great undertaking,” a picture teaching that learning takes years; and Emperor Shun in the rear hall.",
+      "zh": "一颗明珠，三重功能；门前——探花陈伯陶的石鼓、雀鹿蜂猴祈爵禄、砖雕故事与门神；祠内——六大工艺与牡丹莲狮寓意、倒福、岭南佳果、芭蕉“大业”、劝学需年岁的画，以及后堂的舜帝。",
+      "stopId": "stop-8",
+      "focusPhrases": [
+        "Chen Botao the tanhua",
+        "bird-deer-bee-monkey"
+      ],
+      "audio": "audio/scenic_guides/chen-family-temple/chen-family-temple-s29.mp3"
+    },
+    {
+      "id": "chen-family-temple-s30",
+      "en": "That is the full Chen Family Temple toolkit from the white paper.",
+      "zh": "这就是白皮书中陈家祠的完整工具包。",
+      "stopId": "stop-8",
+      "focusPhrases": [],
+      "audio": "audio/scenic_guides/chen-family-temple/chen-family-temple-s30.mp3"
+    },
+    {
+      "id": "chen-family-temple-s31",
+      "en": "Thank you very much.",
+      "zh": "非常感谢。",
+      "stopId": "stop-8",
+      "focusPhrases": [],
+      "audio": "audio/scenic_guides/chen-family-temple/chen-family-temple-s31.mp3"
+    },
+    {
+      "id": "chen-family-temple-s32",
+      "en": "I welcome your questions.",
+      "zh": "欢迎提问。",
+      "stopId": "stop-8",
+      "focusPhrases": [],
+      "audio": "audio/scenic_guides/chen-family-temple/chen-family-temple-s32.mp3"
+    }
+  ],
+  "mustSay": [
+    "Pearl of Lingnan Artistic Architecture",
+    "Chen Botao / tanhua",
+    "Jue Lu Feng Hou",
+    "six crafts",
+    "Emperor Shun"
+  ]
+}

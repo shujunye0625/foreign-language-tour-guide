@@ -1,0 +1,473 @@
+{
+  "id": "nanyue-king-museum",
+  "titleZh": "南越王墓",
+  "titleEn": "Nanyue King Tomb",
+  "blurb": "赵眜 · 金印玉印 · 丝缕玉衣 · 句鑃",
+  "targetMinutes": 8,
+  "stops": [
+    {
+      "id": "stop-0",
+      "title": "### Opening",
+      "sceneHook": "### Opening",
+      "sentenceStart": 0,
+      "sentenceEnd": 5,
+      "mustSay": [
+        "Zhao Mo / Emperor Wen",
+        "gold seal with dragon handle",
+        "nine jade seals"
+      ]
+    },
+    {
+      "id": "stop-1",
+      "title": "Stop A: Who is buried here?",
+      "sceneHook": "墓主介绍",
+      "sentenceStart": 6,
+      "sentenceEnd": 8,
+      "mustSay": []
+    },
+    {
+      "id": "stop-2",
+      "title": "Stop B: Discovery and the tomb’s shape",
+      "sceneHook": "墓室模型 / 平面图",
+      "sentenceStart": 9,
+      "sentenceEnd": 12,
+      "mustSay": []
+    },
+    {
+      "id": "stop-3",
+      "title": "Stop C: Palace ruins nearby",
+      "sceneHook": "宫殿遗址展板",
+      "sentenceStart": 13,
+      "sentenceEnd": 15,
+      "mustSay": []
+    },
+    {
+      "id": "stop-4",
+      "title": "Stop D: Fifteen people buried alive",
+      "sceneHook": "殉人展区",
+      "sentenceStart": 16,
+      "sentenceEnd": 18,
+      "mustSay": []
+    },
+    {
+      "id": "stop-5",
+      "title": "Stop E: Seals — gold imperial seal and nine jade seals",
+      "sceneHook": "金印 · 玉印展柜",
+      "sentenceStart": 19,
+      "sentenceEnd": 24,
+      "mustSay": []
+    },
+    {
+      "id": "stop-6",
+      "title": "Stop F: The silk jade garment and the giant jade disc",
+      "sceneHook": "丝缕玉衣 · 玉璧",
+      "sentenceStart": 25,
+      "sentenceEnd": 29,
+      "mustSay": []
+    },
+    {
+      "id": "stop-7",
+      "title": "Stop G: Bronze — dagger-axe, tiger tally, and chime",
+      "sceneHook": "铜戈 · 虎节 · 句鑃",
+      "sentenceStart": 30,
+      "sentenceEnd": 33,
+      "mustSay": []
+    },
+    {
+      "id": "stop-8",
+      "title": "Stop H: A Persian silver box — and why Guangzhou cares",
+      "sceneHook": "银盒展柜",
+      "sentenceStart": 34,
+      "sentenceEnd": 36,
+      "mustSay": []
+    },
+    {
+      "id": "stop-9",
+      "title": "Closing",
+      "sceneHook": "展区出口",
+      "sentenceStart": 37,
+      "sentenceEnd": 39,
+      "mustSay": [
+        "silk-thread jade garment",
+        "Gou Diao"
+      ]
+    }
+  ],
+  "sentences": [
+    {
+      "id": "nanyue-king-museum-s01",
+      "en": "Hello, everyone.",
+      "zh": "大家好。",
+      "stopId": "stop-0",
+      "focusPhrases": [
+        "King’s Tomb Exhibition Area",
+        "Nanyue King Museum",
+        "Nan Yue",
+        "Nanhai Prefecture",
+        "Zhao Tuo",
+        "Nanyue Kingdom",
+        "five kings",
+        "ninety-three years"
+      ],
+      "audio": "audio/scenic_guides/nanyue-king-museum/nanyue-king-museum-s01.mp3"
+    },
+    {
+      "id": "nanyue-king-museum-s02",
+      "en": "Welcome to the King’s Tomb Exhibition Area of the Nanyue King Museum.",
+      "zh": "欢迎来到南越王博物馆的王墓展区。",
+      "stopId": "stop-0",
+      "focusPhrases": [],
+      "audio": "audio/scenic_guides/nanyue-king-museum/nanyue-king-museum-s02.mp3"
+    },
+    {
+      "id": "nanyue-king-museum-s03",
+      "en": "Two thousand years under Elephant Hill still speak through jade, bronze, and gold.",
+      "zh": "象岗山下两千年的岁月，仍通过玉、青铜和黄金在诉说。",
+      "stopId": "stop-0",
+      "focusPhrases": [],
+      "audio": "audio/scenic_guides/nanyue-king-museum/nanyue-king-museum-s03.mp3"
+    },
+    {
+      "id": "nanyue-king-museum-s04",
+      "en": "Before we meet the tomb owner, one short map of history: in Pre-Qin times this region was home to the Nan Yue people; after Qin unified Lingnan, Nanhai Prefecture was set up here — and today’s Guangzhou grew from that seat of government.",
+      "zh": "在认识墓主之前，先快速回顾一段历史：先秦时期这一带是南越人的家园；秦统一岭南后，在此设南海郡——今天的广州，就从这座郡治发展而来。",
+      "stopId": "stop-0",
+      "focusPhrases": [],
+      "audio": "audio/scenic_guides/nanyue-king-museum/nanyue-king-museum-s04.mp3"
+    },
+    {
+      "id": "nanyue-king-museum-s05",
+      "en": "At the start of the Western Han, the former Qin general Zhao Tuo founded the Nanyue Kingdom, promoting Han–Yue fusion.",
+      "zh": "西汉初年，原秦将赵佗 Zhao Tuo 建立南越国，推行汉越融合。",
+      "stopId": "stop-0",
+      "focusPhrases": [],
+      "audio": "audio/scenic_guides/nanyue-king-museum/nanyue-king-museum-s05.mp3"
+    },
+    {
+      "id": "nanyue-king-museum-s06",
+      "en": "The kingdom lasted through five kings for ninety-three years, until it submitted to the Han in 111 BC.",
+      "zh": "南越国历经五位国王、共九十三年，直到公元前一一一年归附汉朝。",
+      "stopId": "stop-0",
+      "focusPhrases": [],
+      "audio": "audio/scenic_guides/nanyue-king-museum/nanyue-king-museum-s06.mp3"
+    },
+    {
+      "id": "nanyue-king-museum-s07",
+      "en": "The tomb owner was Zhao Mo.",
+      "zh": "墓主是赵眜 Zhao Mo。",
+      "stopId": "stop-1",
+      "focusPhrases": [
+        "Zhao Mo",
+        "“Emperor Wen”",
+        "second king",
+        "sixteen years",
+        "137 to 122 BC"
+      ],
+      "audio": "audio/scenic_guides/nanyue-king-museum/nanyue-king-museum-s07.mp3"
+    },
+    {
+      "id": "nanyue-king-museum-s08",
+      "en": "He styled himself “Emperor Wen” and was the second king of the Nanyue Kingdom.",
+      "zh": "他自称“文帝”，是南越国第二代国王。",
+      "stopId": "stop-1",
+      "focusPhrases": [],
+      "audio": "audio/scenic_guides/nanyue-king-museum/nanyue-king-museum-s08.mp3"
+    },
+    {
+      "id": "nanyue-king-museum-s09",
+      "en": "He came to the throne in the fourth year of Emperor Wu’s Jianyuan era and reigned sixteen years, from 137 to 122 BC.",
+      "zh": "他在汉武帝建元四年即位，在位十六年，从公元前一三七到一二二年。",
+      "stopId": "stop-1",
+      "focusPhrases": [],
+      "audio": "audio/scenic_guides/nanyue-king-museum/nanyue-king-museum-s09.mp3"
+    },
+    {
+      "id": "nanyue-king-museum-s10",
+      "en": "The tomb of Zhao Mo was discovered in 1983, 20 meters under Elephant Hill at Jiefangbei Road in Guangzhou.",
+      "zh": "赵眜墓于一九八三年发现，位于广州解放北路象岗山下二十米处。",
+      "stopId": "stop-2",
+      "focusPhrases": [
+        "1983",
+        "20 meters",
+        "Elephant Hill",
+        "Jiefangbei Road",
+        "100 square meters",
+        "750",
+        "seven chambers"
+      ],
+      "audio": "audio/scenic_guides/nanyue-king-museum/nanyue-king-museum-s10.mp3"
+    },
+    {
+      "id": "nanyue-king-museum-s11",
+      "en": "It covers about 100 square meters, is built of 750 blocks of red sandstone, and is divided into front and rear sections with seven chambers in all.",
+      "zh": "墓室约一百平方米，用七百五十块红砂岩石砌成，分前后两部分，共七个墓室。",
+      "stopId": "stop-2",
+      "focusPhrases": [],
+      "audio": "audio/scenic_guides/nanyue-king-museum/nanyue-king-museum-s11.mp3"
+    },
+    {
+      "id": "nanyue-king-museum-s12",
+      "en": "This is the most important Han tomb so far found in South China — the largest in size, the occupant of the highest political and social status, and the richest in unearthed relics.",
+      "zh": "这是迄今华南发现的最重要的汉代墓葬——规模最大、墓主人政治社会地位最高、出土文物也最丰富。",
+      "stopId": "stop-2",
+      "focusPhrases": [],
+      "audio": "audio/scenic_guides/nanyue-king-museum/nanyue-king-museum-s12.mp3"
+    },
+    {
+      "id": "nanyue-king-museum-s13",
+      "en": "It is considered one of the five major archaeological finds in modern China.",
+      "zh": "它被认为是中国现代五大考古发现之一。",
+      "stopId": "stop-2",
+      "focusPhrases": [],
+      "audio": "audio/scenic_guides/nanyue-king-museum/nanyue-king-museum-s13.mp3"
+    },
+    {
+      "id": "nanyue-king-museum-s14",
+      "en": "Archaeologists also trial-excavated about 500 square meters of Nanyue palace ruins at the original site of Guangzhou’s Children’s Park (on the east side, as the Chinese text notes).",
+      "zh": "考古人员还在原广州市儿童公园遗址试掘了约五百平方米的南越宫署遗址（中文材料注明在东侧）。",
+      "stopId": "stop-3",
+      "focusPhrases": [
+        "500 square meters",
+        "Children’s Park",
+        "Chang Le Gong"
+      ],
+      "audio": "audio/scenic_guides/nanyue-king-museum/nanyue-king-museum-s14.mp3"
+    },
+    {
+      "id": "nanyue-king-museum-s15",
+      "en": "The spot under excavation matched the position of Chang Le Gong in the Han palace at Chang’an — so was this Nanyue’s “Chang Le Gong”?",
+      "zh": "发掘位置与汉长安宫中的长乐宫位置相对应——那么这里会是南越的“长乐宫”吗？",
+      "stopId": "stop-3",
+      "focusPhrases": [],
+      "audio": "audio/scenic_guides/nanyue-king-museum/nanyue-king-museum-s15.mp3"
+    },
+    {
+      "id": "nanyue-king-museum-s16",
+      "en": "Further research is still needed.",
+      "zh": "还需要进一步研究。",
+      "stopId": "stop-3",
+      "focusPhrases": [],
+      "audio": "audio/scenic_guides/nanyue-king-museum/nanyue-king-museum-s16.mp3"
+    },
+    {
+      "id": "nanyue-king-museum-s17",
+      "en": "In the tomb, fifteen persons were found buried alive with the dead: one in the front chamber — a “Jing Xiang Ling,” perhaps a eunuch; one in the outer coffin, probably a cart-driver.",
+      "zh": "墓中发现十五人为殉葬：前室一人——“景巷令”，或许是宦官；外棺一人，可能是车夫。",
+      "stopId": "stop-4",
+      "focusPhrases": [
+        "fifteen persons",
+        "front chamber",
+        "“Jing Xiang Ling,”",
+        "outer coffin",
+        "cart-driver"
+      ],
+      "audio": "audio/scenic_guides/nanyue-king-museum/nanyue-king-museum-s17.mp3"
+    },
+    {
+      "id": "nanyue-king-museum-s18",
+      "en": "Burying the living with dead sovereigns had prevailed in Central China in the Shang and Zhou dynasties (1766–770 BC), but was largely abolished in the Han Dynasty (206 BC–AD 220).",
+      "zh": "活人殉葬在商周时期（公元前一七六六至七七〇年）曾盛行于中原，到汉代（公元前二〇六至公元二二〇年）已基本废除。",
+      "stopId": "stop-4",
+      "focusPhrases": [],
+      "audio": "audio/scenic_guides/nanyue-king-museum/nanyue-king-museum-s18.mp3"
+    },
+    {
+      "id": "nanyue-king-museum-s19",
+      "en": "Finding so many sacrificial persons here shows this cruel custom was still practiced by Nanyue’s ruling class.",
+      "zh": "这里发现这么多殉人，说明南越统治阶级仍在实行这一残酷习俗。",
+      "stopId": "stop-4",
+      "focusPhrases": [],
+      "audio": "audio/scenic_guides/nanyue-king-museum/nanyue-king-museum-s19.mp3"
+    },
+    {
+      "id": "nanyue-king-museum-s20",
+      "en": "Please keep two seal stories clear — they are different objects.",
+      "zh": "请把两枚印章的故事分清楚——它们是不同的器物。",
+      "stopId": "stop-5",
+      "focusPhrases": [],
+      "audio": "audio/scenic_guides/nanyue-king-museum/nanyue-king-museum-s20.mp3"
+    },
+    {
+      "id": "nanyue-king-museum-s21",
+      "en": "First, the gold seal of Emperor Wen: the only extant emperor’s seal from the Qin and Han dynasties unearthed by archaeology.",
+      "zh": "第一枚是文帝金印：迄今考古出土的唯一一枚秦汉时期皇帝印玺。",
+      "stopId": "stop-5",
+      "focusPhrases": [],
+      "audio": "audio/scenic_guides/nanyue-king-museum/nanyue-king-museum-s21.mp3"
+    },
+    {
+      "id": "nanyue-king-museum-s22",
+      "en": "Records say imperial seals were white jade with a tiger-shaped handle; but Zhao Mo’s seal is gold with a dragon handle, cast in Nanyue, and used in his lifetime.",
+      "zh": "文献记载帝印应为白玉虎钮；但赵眜这枚是龙钮金印，在南越铸造，生前使用。",
+      "stopId": "stop-5",
+      "focusPhrases": [],
+      "audio": "audio/scenic_guides/nanyue-king-museum/nanyue-king-museum-s22.mp3"
+    },
+    {
+      "id": "nanyue-king-museum-s23",
+      "en": "Second, the jade seals.",
+      "zh": "第二是玉印。",
+      "stopId": "stop-5",
+      "focusPhrases": [],
+      "audio": "audio/scenic_guides/nanyue-king-museum/nanyue-king-museum-s23.mp3"
+    },
+    {
+      "id": "nanyue-king-museum-s24",
+      "en": "Of the nine seals unearthed from this tomb, three were found on Zhao Mo’s body in the main coffin chamber, inscribed respectively “Zhao Mo,” “Tai Zi” (the prince), and “Seal of Emperor” (帝印).",
+      "zh": "墓中出土九枚印章，其中三枚发现于主棺室赵眜身上，分别刻有“赵眜”、“太子”和“帝印”。",
+      "stopId": "stop-5",
+      "focusPhrases": [],
+      "audio": "audio/scenic_guides/nanyue-king-museum/nanyue-king-museum-s24.mp3"
+    },
+    {
+      "id": "nanyue-king-museum-s25",
+      "en": "Together they prove that Zhao Mo overstepped his authority to style himself emperor, breaking away from the Han to exercise local power.",
+      "zh": "它们共同证明赵眜僭越称帝，脱离汉朝而行使地方权力。",
+      "stopId": "stop-5",
+      "focusPhrases": [],
+      "audio": "audio/scenic_guides/nanyue-king-museum/nanyue-king-museum-s25.mp3"
+    },
+    {
+      "id": "nanyue-king-museum-s26",
+      "en": "Jade garments were a burial practice peculiar to the Han Dynasty.",
+      "zh": "玉衣是汉代特有的葬制。",
+      "stopId": "stop-6",
+      "focusPhrases": [
+        "silk strands",
+        "first and only",
+        "1.73 meters",
+        "2,291",
+        "red silk strands"
+      ],
+      "audio": "audio/scenic_guides/nanyue-king-museum/nanyue-king-museum-s26.mp3"
+    },
+    {
+      "id": "nanyue-king-museum-s27",
+      "en": "Elsewhere they were usually sewn with gold, silver, or bronze strands.",
+      "zh": "别处通常用金缕、银缕或铜缕编缀。",
+      "stopId": "stop-6",
+      "focusPhrases": [],
+      "audio": "audio/scenic_guides/nanyue-king-museum/nanyue-king-museum-s27.mp3"
+    },
+    {
+      "id": "nanyue-king-museum-s28",
+      "en": "Zhao Mo’s garment was sewn with silk strands — the first and only silk-thread jade garment found in China so far.",
+      "zh": "赵眜的玉衣用丝缕编缀——这是中国迄今发现的第一件、也是唯一一件丝缕玉衣。",
+      "stopId": "stop-6",
+      "focusPhrases": [],
+      "audio": "audio/scenic_guides/nanyue-king-museum/nanyue-king-museum-s28.mp3"
+    },
+    {
+      "id": "nanyue-king-museum-s29",
+      "en": "This jade garment is 1.73 meters long, made of 2,291 jade pieces strung with red silk strands, forming bright, beautiful patterns.",
+      "zh": "这件玉衣长一点七三米，由两千二百九十一片玉片用红色丝缕串成，图案鲜明美丽。",
+      "stopId": "stop-6",
+      "focusPhrases": [],
+      "audio": "audio/scenic_guides/nanyue-king-museum/nanyue-king-museum-s29.mp3"
+    },
+    {
+      "id": "nanyue-king-museum-s30",
+      "en": "Of 56 jade discs (bi), 47 were in the main coffin chamber; one is 33.4 cm in diameter — the largest of its kind unearthed in China.",
+      "zh": "五十六件玉璧中，四十七件出自主棺室；其中一件直径三十三点四厘米——是中国出土同类中最大的。",
+      "stopId": "stop-6",
+      "focusPhrases": [],
+      "audio": "audio/scenic_guides/nanyue-king-museum/nanyue-king-museum-s30.mp3"
+    },
+    {
+      "id": "nanyue-king-museum-s31",
+      "en": "Among the weapons, one copper dagger-axe bears the inscription “王四年相邦张义.” It was made under the supervision of Zhang Yi in the reign of King Hui of Qin and later brought to the South.",
+      "zh": "兵器中有一件铜戈，铭文为“王四年相邦张义”。它在秦惠王时期由张义监造，后带到南方。",
+      "stopId": "stop-7",
+      "focusPhrases": [
+        "copper dagger-axe",
+        "“王四年相邦张义.”",
+        "Zhang Yi"
+      ],
+      "audio": "audio/scenic_guides/nanyue-king-museum/nanyue-king-museum-s31.mp3"
+    },
+    {
+      "id": "nanyue-king-museum-s32",
+      "en": "A bronze tiger tally with gold inlay is the only gold-inlaying tiger tally still existing in China — a credential for troop movement or diplomacy.",
+      "zh": "一件错金铜虎节，是中国现存唯一的错金虎节——用于调兵或外交的凭证。",
+      "stopId": "stop-7",
+      "focusPhrases": [],
+      "audio": "audio/scenic_guides/nanyue-king-museum/nanyue-king-museum-s32.mp3"
+    },
+    {
+      "id": "nanyue-king-museum-s33",
+      "en": "Especially worth mentioning is a chime of bronzes called “Gou Diao”: eight pieces, cast with the epigraph “Made in the Official Conservatory in the Ninth Year of Emperor Wen,” showing they were made in Nanyue in 129 BC.",
+      "zh": "尤其值得一提的是一组青铜乐器“句鑃”Gou Diao：共八件，铸有铭文“文帝九年乐府工造”，说明它们于公元前一二九年在南越制成。",
+      "stopId": "stop-7",
+      "focusPhrases": [],
+      "audio": "audio/scenic_guides/nanyue-king-museum/nanyue-king-museum-s33.mp3"
+    },
+    {
+      "id": "nanyue-king-museum-s34",
+      "en": "After more than 2,100 years, they can still produce clear, accurate notes.",
+      "zh": "历经两千一百多年，它们仍能发出清晰、准确的音高。",
+      "stopId": "stop-7",
+      "focusPhrases": [],
+      "audio": "audio/scenic_guides/nanyue-king-museum/nanyue-king-museum-s34.mp3"
+    },
+    {
+      "id": "nanyue-king-museum-s35",
+      "en": "One silver box, by shape and ornament so different from traditional Chinese silverware, and by chemical analysis of the pills inside, is believed to be a product from overseas Persia, with contents likely a kind of Arabian medicine — evidence of early maritime contact.",
+      "zh": "有一件银盒，从造型和纹饰看与中国传统银器截然不同；对盒内丸药的化学分析显示，它很可能来自海外波斯，内容物似为一种阿拉伯药物——这是早期海上交往的证据。",
+      "stopId": "stop-8",
+      "focusPhrases": [
+        "Persia",
+        "Arabian medicine"
+      ],
+      "audio": "audio/scenic_guides/nanyue-king-museum/nanyue-king-museum-s35.mp3"
+    },
+    {
+      "id": "nanyue-king-museum-s36",
+      "en": "Many bronzes and other artifacts show excellent workmanship with distinctive local features.",
+      "zh": "许多青铜器和其他文物工艺精湛，并带有鲜明的地方特色。",
+      "stopId": "stop-8",
+      "focusPhrases": [],
+      "audio": "audio/scenic_guides/nanyue-king-museum/nanyue-king-museum-s36.mp3"
+    },
+    {
+      "id": "nanyue-king-museum-s37",
+      "en": "They reflect Nanyue metal-casting skill and serve as important evidence for the founding history of Guangzhou.",
+      "zh": "它们反映了南越的金属铸造技艺，也是广州建城史的重要证据。",
+      "stopId": "stop-8",
+      "focusPhrases": [],
+      "audio": "audio/scenic_guides/nanyue-king-museum/nanyue-king-museum-s37.mp3"
+    },
+    {
+      "id": "nanyue-king-museum-s38",
+      "en": "Hold this chain: Zhao Tuo’s kingdom → Zhao Mo the second king → 1983 Elephant Hill → fifteen sacrificial persons → gold dragon-handle seal + nine jade seals (three on the body) → silk jade garment → bronze treasures → Guangzhou’s origins.",
+      "zh": "请记住这条链条：赵佗建国 → 第二代王赵眜 → 一九八三年象岗 → 十五人殉葬 → 龙钮金印加九枚玉印（三枚在身上） → 丝缕玉衣 → 青铜珍宝 → 广州起源。",
+      "stopId": "stop-9",
+      "focusPhrases": [
+        "Zhao Tuo’s kingdom → Zhao Mo the second king → 1983 Elephant Hill → fifteen sacrificial persons → gold dragon-handle seal + nine jade seals (three on the body) → silk jade garment → bronze treasures → Guangzhou’s origins"
+      ],
+      "audio": "audio/scenic_guides/nanyue-king-museum/nanyue-king-museum-s38.mp3"
+    },
+    {
+      "id": "nanyue-king-museum-s39",
+      "en": "That is the full white-paper toolkit for this exhibition area.",
+      "zh": "这就是本展区白皮书的完整工具包。",
+      "stopId": "stop-9",
+      "focusPhrases": [],
+      "audio": "audio/scenic_guides/nanyue-king-museum/nanyue-king-museum-s39.mp3"
+    },
+    {
+      "id": "nanyue-king-museum-s40",
+      "en": "I’m happy to take your questions.",
+      "zh": "欢迎提问。",
+      "stopId": "stop-9",
+      "focusPhrases": [],
+      "audio": "audio/scenic_guides/nanyue-king-museum/nanyue-king-museum-s40.mp3"
+    }
+  ],
+  "mustSay": [
+    "Zhao Mo / Emperor Wen",
+    "gold seal with dragon handle",
+    "nine jade seals",
+    "silk-thread jade garment",
+    "Gou Diao"
+  ]
+}

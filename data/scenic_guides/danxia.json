@@ -1,0 +1,433 @@
+{
+  "id": "danxia",
+  "titleZh": "丹霞山",
+  "titleEn": "Danxia Mountain",
+  "blurb": "红石成因 · 群象睡美人 · 阴阳石 · 别传寺",
+  "targetMinutes": 8,
+  "stops": [
+    {
+      "id": "stop-0",
+      "title": "Opening",
+      "sceneHook": "景区入口 / 总览",
+      "sentenceStart": 0,
+      "sentenceEnd": 3,
+      "mustSay": [
+        "Danxia Landform",
+        "China Ruby Park",
+        "Elephants Crossing the River"
+      ]
+    },
+    {
+      "id": "stop-1",
+      "title": "Stop A: How the red land was born — and how it got its scientific name",
+      "sceneHook": "红崖剖面 / 成因解说牌",
+      "sentenceStart": 4,
+      "sentenceEnd": 11,
+      "mustSay": []
+    },
+    {
+      "id": "stop-2",
+      "title": "Stop B: China Ruby Park — the big picture in numbers",
+      "sceneHook": "观景台俯瞰群峰",
+      "sentenceStart": 12,
+      "sentenceEnd": 16,
+      "mustSay": []
+    },
+    {
+      "id": "stop-3",
+      "title": "Stop 1: Jinjiang River — “The Elephants Crossing the River”",
+      "sceneHook": "锦江对岸象形石",
+      "sentenceStart": 17,
+      "sentenceEnd": 19,
+      "mustSay": []
+    },
+    {
+      "id": "stop-4",
+      "title": "Stop 2: Yangyuan Bridge — “The Sleeping Belle”",
+      "sceneHook": "阳元桥上看睡美人",
+      "sentenceStart": 20,
+      "sentenceEnd": 23,
+      "mustSay": []
+    },
+    {
+      "id": "stop-5",
+      "title": "Stop 3: Yangyuan Hill and Yangyuan Stone",
+      "sceneHook": "阳元石脚下",
+      "sentenceStart": 24,
+      "sentenceEnd": 26,
+      "mustSay": []
+    },
+    {
+      "id": "stop-6",
+      "title": "Stop 4: Yinyuan Cliff — Nature’s Adam and Eve",
+      "sceneHook": "阴元石景区",
+      "sentenceStart": 27,
+      "sentenceEnd": 29,
+      "mustSay": []
+    },
+    {
+      "id": "stop-7",
+      "title": "Stop 5: Biechuan Temple and the chameleon dragon",
+      "sceneHook": "别传寺 · 大雄宝殿",
+      "sentenceStart": 30,
+      "sentenceEnd": 33,
+      "mustSay": []
+    },
+    {
+      "id": "stop-8",
+      "title": "Closing",
+      "sceneHook": "出口 / 集合点",
+      "sentenceStart": 34,
+      "sentenceEnd": 36,
+      "mustSay": [
+        "Sleeping Belle",
+        "Yangyuan Stone",
+        "four most famous mountains"
+      ]
+    }
+  ],
+  "sentences": [
+    {
+      "id": "danxia-s01",
+      "en": "Good morning, everyone.",
+      "zh": "各位早上好。",
+      "stopId": "stop-0",
+      "focusPhrases": [
+        "Danxia Mountain",
+        "forty-five kilometers",
+        "four most famous mountains",
+        "Danxia, Luofu, Xiqiao, and Dinghu"
+      ],
+      "audio": "audio/scenic_guides/danxia/danxia-s01.mp3"
+    },
+    {
+      "id": "danxia-s02",
+      "en": "Welcome to Guangdong.",
+      "zh": "欢迎来到广东。",
+      "stopId": "stop-0",
+      "focusPhrases": [],
+      "audio": "audio/scenic_guides/danxia/danxia-s02.mp3"
+    },
+    {
+      "id": "danxia-s03",
+      "en": "Today we visit Danxia Mountain, about forty-five kilometers northeast of Shaoguan City — a world-famous red-stone landscape and the namesake of a whole geological term.",
+      "zh": "今天我们游览丹霞山，它位于韶关市东北约四十五公里处——这里是世界著名的红石景观，也是一种地质术语的命名地。",
+      "stopId": "stop-0",
+      "focusPhrases": [],
+      "audio": "audio/scenic_guides/danxia/danxia-s03.mp3"
+    },
+    {
+      "id": "danxia-s04",
+      "en": "In Lingnan travel talk, it ranks among the four most famous mountains of the region: Danxia, Luofu, Xiqiao, and Dinghu.",
+      "zh": "在岭南旅游口语里，它位列岭南四大名山之中：丹霞、罗浮、西樵和鼎湖。",
+      "stopId": "stop-0",
+      "focusPhrases": [],
+      "audio": "audio/scenic_guides/danxia/danxia-s04.mp3"
+    },
+    {
+      "id": "danxia-s05",
+      "en": "Geological studies show that twenty-five million years ago, this place was a vast, low-lying lake.",
+      "zh": "地质研究表明，两千五百万年前，这里还是一片广阔低洼的湖泊。",
+      "stopId": "stop-1",
+      "focusPhrases": [
+        "twenty-five million years ago",
+        "oxidized into red rocks"
+      ],
+      "audio": "audio/scenic_guides/danxia/danxia-s05.mp3"
+    },
+    {
+      "id": "danxia-s06",
+      "en": "Later, movements of the earth’s crust lifted the land; the lake water receded; and the sediment at the bottom gradually oxidized into red rocks.",
+      "zh": "后来地壳运动抬升了地面，湖水退去，湖底的沉积物逐渐氧化成红色岩石。",
+      "stopId": "stop-1",
+      "focusPhrases": [],
+      "audio": "audio/scenic_guides/danxia/danxia-s06.mp3"
+    },
+    {
+      "id": "danxia-s07",
+      "en": "That is how the glowing red cliffs you see today were formed.",
+      "zh": "你们今天看到的这些鲜红崖壁，就是这样形成的。",
+      "stopId": "stop-1",
+      "focusPhrases": [],
+      "audio": "audio/scenic_guides/danxia/danxia-s07.mp3"
+    },
+    {
+      "id": "danxia-s08",
+      "en": "In the 1930s, Professor Chen Guoda of Sun Yat-sen University made an intensive study of Danxia Mountain and other red-rock mountains in South China.",
+      "zh": "二十世纪三十年代，中山大学的陈国达 Chen Guoda 教授对丹霞山以及华南其他红岩山体做了深入研究。",
+      "stopId": "stop-1",
+      "focusPhrases": [],
+      "audio": "audio/scenic_guides/danxia/danxia-s08.mp3"
+    },
+    {
+      "id": "danxia-s09",
+      "en": "He named this kind of red-rock land configuration the “Danxia Landform.” The name was soon accepted worldwide.",
+      "zh": "他把这种红岩地貌命名为“丹霞地貌”。这个名称很快被全世界接受。",
+      "stopId": "stop-1",
+      "focusPhrases": [],
+      "audio": "audio/scenic_guides/danxia/danxia-s09.mp3"
+    },
+    {
+      "id": "danxia-s10",
+      "en": "From then on, wherever you find landscapes of red sandstone conglomerate with sheer, red cliffs, geologists call them Danxia landform.",
+      "zh": "从那以后，凡是见到由红色砂砾岩构成、崖壁陡峭鲜红的景观，地质学家都称之为丹霞地貌。",
+      "stopId": "stop-1",
+      "focusPhrases": [],
+      "audio": "audio/scenic_guides/danxia/danxia-s10.mp3"
+    },
+    {
+      "id": "danxia-s11",
+      "en": "Places featuring Danxia landform can be found on all continents except Antarctica — for example, the Grand Canyon in the United States and some areas in Saxony, Germany.",
+      "zh": "除南极洲外，各大洲都能找到丹霞地貌——比如美国的大峡谷，以及德国萨克森的一些地区。",
+      "stopId": "stop-1",
+      "focusPhrases": [],
+      "audio": "audio/scenic_guides/danxia/danxia-s11.mp3"
+    },
+    {
+      "id": "danxia-s12",
+      "en": "But Danxia Mountain itself is the largest, the most typical, and the most beautiful of its kind.",
+      "zh": "但丹霞山本身，是同类中规模最大、最典型、也最美的一处。",
+      "stopId": "stop-1",
+      "focusPhrases": [],
+      "audio": "audio/scenic_guides/danxia/danxia-s12.mp3"
+    },
+    {
+      "id": "danxia-s13",
+      "en": "Please look around.",
+      "zh": "请大家环顾四周。",
+      "stopId": "stop-2",
+      "focusPhrases": [
+        "319 square kilometers",
+        "over 600",
+        "China Ruby Park",
+        "1995",
+        "geological nature reserve"
+      ],
+      "audio": "audio/scenic_guides/danxia/danxia-s13.mp3"
+    },
+    {
+      "id": "danxia-s14",
+      "en": "The mountain covers 319 square kilometers, with over 600 red rock peaks standing out against green woods — like a garden of ruby sculptures.",
+      "zh": "这座山占地三百一十九平方公里，六百多座红岩峰峦挺立在绿林之间——像一座红宝石雕塑园。",
+      "stopId": "stop-2",
+      "focusPhrases": [],
+      "audio": "audio/scenic_guides/danxia/danxia-s14.mp3"
+    },
+    {
+      "id": "danxia-s15",
+      "en": "That is why it is also called China Ruby Park, or China Red Stone Park.",
+      "zh": "所以它又被称为中国红石公园，或中国红宝石公园 China Ruby Park。",
+      "stopId": "stop-2",
+      "focusPhrases": [],
+      "audio": "audio/scenic_guides/danxia/danxia-s15.mp3"
+    },
+    {
+      "id": "danxia-s16",
+      "en": "In 1995, the Chinese State Council approved it as a geological nature reserve.",
+      "zh": "一九九五年，国务院批准它为地质自然保护区。",
+      "stopId": "stop-2",
+      "focusPhrases": [],
+      "audio": "audio/scenic_guides/danxia/danxia-s16.mp3"
+    },
+    {
+      "id": "danxia-s17",
+      "en": "Now, let’s walk the classic viewing route — from river to bridge, from “yang” to “yin,” and finally into the temple.",
+      "zh": "接下来，我们走经典观景路线——从江到桥，从“阳”到“阴”，最后进入寺庙。",
+      "stopId": "stop-2",
+      "focusPhrases": [],
+      "audio": "audio/scenic_guides/danxia/danxia-s17.mp3"
+    },
+    {
+      "id": "danxia-s18",
+      "en": "Please look at the rocks beyond the Jinjiang River.",
+      "zh": "请看锦江对岸的那些岩石。",
+      "stopId": "stop-3",
+      "focusPhrases": [
+        "Jinjiang River",
+        "“The Elephants Crossing the River.”"
+      ],
+      "audio": "audio/scenic_guides/danxia/danxia-s18.mp3"
+    },
+    {
+      "id": "danxia-s19",
+      "en": "They look like a herd of elephants wading across toward us — trunks, tusks, ears, and eyes all lifelike.",
+      "zh": "它们像一群大象正涉水向我们走来——象鼻、象牙、耳朵和眼睛都栩栩如生。",
+      "stopId": "stop-3",
+      "focusPhrases": [],
+      "audio": "audio/scenic_guides/danxia/danxia-s19.mp3"
+    },
+    {
+      "id": "danxia-s20",
+      "en": "So this sight is named “The Elephants Crossing the River.”",
+      "zh": "所以这处景观叫作“群象过江” The Elephants Crossing the River。",
+      "stopId": "stop-3",
+      "focusPhrases": [],
+      "audio": "audio/scenic_guides/danxia/danxia-s20.mp3"
+    },
+    {
+      "id": "danxia-s21",
+      "en": "Now we stand on Yangyuan Bridge.",
+      "zh": "现在我们站在阳元桥上。",
+      "stopId": "stop-4",
+      "focusPhrases": [
+        "Yangyuan Bridge",
+        "right",
+        "“The Sleeping Belle,”",
+        "“The Beautiful Girl Blocking the River”"
+      ],
+      "audio": "audio/scenic_guides/danxia/danxia-s21.mp3"
+    },
+    {
+      "id": "danxia-s22",
+      "en": "Please look to your right, at the hill in the distance.",
+      "zh": "请向右边看，远处那座山。",
+      "stopId": "stop-4",
+      "focusPhrases": [],
+      "audio": "audio/scenic_guides/danxia/danxia-s22.mp3"
+    },
+    {
+      "id": "danxia-s23",
+      "en": "It looks like a young girl lying down to sleep: from right to left, her head, neck, chest, and belly are clearly outlined.",
+      "zh": "它像一位少女躺着入睡：从右到左，头、颈、胸、腹轮廓清晰。",
+      "stopId": "stop-4",
+      "focusPhrases": [],
+      "audio": "audio/scenic_guides/danxia/danxia-s23.mp3"
+    },
+    {
+      "id": "danxia-s24",
+      "en": "This sight is called “The Sleeping Belle,” or “The Beautiful Girl Blocking the River” — Yu Nü Lan Jiang.",
+      "zh": "这处景观叫“睡美人” The Sleeping Belle，也叫“玉女拦江” Yu Nü Lan Jiang。",
+      "stopId": "stop-4",
+      "focusPhrases": [],
+      "audio": "audio/scenic_guides/danxia/danxia-s24.mp3"
+    },
+    {
+      "id": "danxia-s25",
+      "en": "Next is Yangyuan Hill, meaning “the Hill of Male Sex.” The famous stone column here — Yangyuan Stone — is about 28 meters high and 7 meters in diameter, and it looks strikingly like the male organ.",
+      "zh": "下一站是阳元山，意思是“男性之山”。这里著名的石柱——阳元石——高约二十八米，直径约七米，外形酷似男性生殖器。",
+      "stopId": "stop-5",
+      "focusPhrases": [
+        "Yangyuan Hill",
+        "Yangyuan Stone",
+        "28 meters",
+        "7 meters",
+        "three hundred thousand years"
+      ],
+      "audio": "audio/scenic_guides/danxia/danxia-s25.mp3"
+    },
+    {
+      "id": "danxia-s26",
+      "en": "Geological studies show it was once part of the cliff; over three hundred thousand years, Nature severed it from the mountain and carved it into this shape.",
+      "zh": "地质研究表明，它原是崖壁的一部分；历经约三十万年，大自然把它从山体分离，并雕成今天的样子。",
+      "stopId": "stop-5",
+      "focusPhrases": [],
+      "audio": "audio/scenic_guides/danxia/danxia-s26.mp3"
+    },
+    {
+      "id": "danxia-s27",
+      "en": "In the old days, men were regarded as superior to women, and people prayed for more sons to carry on the family name, so pilgrims often worshiped this stone.",
+      "zh": "旧时重男轻女，人们祈求多子以续香火，所以香客常来朝拜这块石头。",
+      "stopId": "stop-5",
+      "focusPhrases": [],
+      "audio": "audio/scenic_guides/danxia/danxia-s27.mp3"
+    },
+    {
+      "id": "danxia-s28",
+      "en": "Nearby is Yinyuan Cliff, formed some one hundred thousand years ago.",
+      "zh": "附近是阴元石景区，大约形成于十万年前。",
+      "stopId": "stop-6",
+      "focusPhrases": [
+        "Yinyuan Cliff",
+        "one hundred thousand years ago"
+      ],
+      "audio": "audio/scenic_guides/danxia/danxia-s28.mp3"
+    },
+    {
+      "id": "danxia-s29",
+      "en": "Just as God sculptured Adam and Eve in the Garden of Eden, Nature carved a stone husband and wife here in Danxia.",
+      "zh": "正如上帝在伊甸园里塑造了亚当和夏娃，大自然也在丹霞雕出了一对石质夫妻。",
+      "stopId": "stop-6",
+      "focusPhrases": [],
+      "audio": "audio/scenic_guides/danxia/danxia-s29.mp3"
+    },
+    {
+      "id": "danxia-s30",
+      "en": "What a wonderful world this is!",
+      "zh": "这世界真奇妙啊！",
+      "stopId": "stop-6",
+      "focusPhrases": [],
+      "audio": "audio/scenic_guides/danxia/danxia-s30.mp3"
+    },
+    {
+      "id": "danxia-s31",
+      "en": "Finally, Biechuan Temple, built in 1662, the first year of Emperor Kangxi’s reign.",
+      "zh": "最后是别传寺，建于一六六二年，也就是康熙元年。",
+      "stopId": "stop-7",
+      "focusPhrases": [
+        "Biechuan Temple",
+        "1662",
+        "three largest Buddhist monasteries"
+      ],
+      "audio": "audio/scenic_guides/danxia/danxia-s31.mp3"
+    },
+    {
+      "id": "danxia-s32",
+      "en": "In the Qing Dynasty it was thronged with pilgrims and ranked among the three largest Buddhist monasteries in northern Guangdong.",
+      "zh": "清代这里香火鼎盛，位列粤北三大佛寺之一。",
+      "stopId": "stop-7",
+      "focusPhrases": [],
+      "audio": "audio/scenic_guides/danxia/danxia-s32.mp3"
+    },
+    {
+      "id": "danxia-s33",
+      "en": "Inside the Sakyamuni Hall, please look at a rock shaped like a dragon.",
+      "zh": "在大雄宝殿里，请看一块形似龙的岩石。",
+      "stopId": "stop-7",
+      "focusPhrases": [],
+      "audio": "audio/scenic_guides/danxia/danxia-s33.mp3"
+    },
+    {
+      "id": "danxia-s34",
+      "en": "It is called “Bian Se Long” — the chameleon — because its color changes with the seasons: light green in spring, dark green in summer, yellowish green in autumn, and brownish yellow in winter.",
+      "zh": "它叫“变色龙”——颜色随季节而变：春浅绿、夏深绿、秋黄绿、冬棕黄。",
+      "stopId": "stop-7",
+      "focusPhrases": [],
+      "audio": "audio/scenic_guides/danxia/danxia-s34.mp3"
+    },
+    {
+      "id": "danxia-s35",
+      "en": "So Danxia is both a geology classroom and a picture book: an ancient lake turned red, a name that traveled the world, elephants in the river, a sleeping girl on the bridge, a stone couple of yin and yang, and a temple dragon that changes color.",
+      "zh": "所以丹霞既是地质课堂，又是一本画册：古湖变红、名字走向世界、江中群象、桥上睡美人、阴阳石夫妻，还有会变色的寺中龙。",
+      "stopId": "stop-8",
+      "focusPhrases": [
+        "geology classroom",
+        "picture book"
+      ],
+      "audio": "audio/scenic_guides/danxia/danxia-s35.mp3"
+    },
+    {
+      "id": "danxia-s36",
+      "en": "If examiners ask about formation, naming, or any of these scenes, you already have the answers in this route.",
+      "zh": "如果考官问起成因、命名，或这些景观中的任何一处，这条路线里你都已经有答案了。",
+      "stopId": "stop-8",
+      "focusPhrases": [],
+      "audio": "audio/scenic_guides/danxia/danxia-s36.mp3"
+    },
+    {
+      "id": "danxia-s37",
+      "en": "I’m ready for your questions.",
+      "zh": "欢迎大家提问。",
+      "stopId": "stop-8",
+      "focusPhrases": [],
+      "audio": "audio/scenic_guides/danxia/danxia-s37.mp3"
+    }
+  ],
+  "mustSay": [
+    "Danxia Landform",
+    "China Ruby Park",
+    "Elephants Crossing the River",
+    "Sleeping Belle",
+    "Yangyuan Stone",
+    "four most famous mountains"
+  ]
+}

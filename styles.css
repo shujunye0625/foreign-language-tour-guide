@@ -72,6 +72,65 @@ body { overscroll-behavior: none; }
   font-size: 1.2rem;
 }
 
+.today-stats {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 8px;
+  margin: 12px 0 6px;
+}
+.today-stats .stat {
+  background: linear-gradient(145deg, #1a2d4a, var(--card));
+  border: 1px solid #243552;
+  border-radius: 12px;
+  padding: 10px 8px;
+  text-align: center;
+}
+.today-stats .stat strong {
+  display: block;
+  font-size: 1.35rem;
+  color: var(--accent2);
+  line-height: 1.2;
+}
+.today-stats .stat span {
+  display: block;
+  margin-top: 4px;
+  font-size: 0.68rem;
+  color: var(--muted);
+  line-height: 1.25;
+}
+.today-hint {
+  margin: 0 0 14px;
+  font-size: 0.78rem;
+  color: var(--muted);
+  text-align: center;
+}
+.today-hint.hidden { display: none; }
+
+.wordbook-ul {
+  list-style: none;
+  margin: 0;
+  padding: 12px 16px;
+}
+.wordbook-ul li {
+  padding: 12px 14px;
+  margin-bottom: 8px;
+  background: var(--card);
+  border-radius: var(--radius);
+  border: 1px solid #243552;
+  cursor: pointer;
+}
+.wordbook-ul li strong { display: block; font-size: 1rem; }
+.wordbook-ul li .gloss {
+  margin-top: 4px;
+  color: var(--muted);
+  font-size: 0.88rem;
+}
+.wordbook-ul li .meta {
+  margin-top: 6px;
+  font-size: 0.75rem;
+  color: var(--accent);
+}
+
 .today-card {
   background: linear-gradient(145deg, #1a2d4a, var(--card));
   border-radius: var(--radius);
@@ -515,9 +574,21 @@ body { overscroll-behavior: none; }
   font-size: 0.85rem;
 }
 .dict-body li { margin-bottom: 6px; }
+.dict-body .sense-zh { color: var(--text); font-weight: 600; }
+.dict-body .sense-en { color: var(--muted); font-size: 0.9rem; margin-top: 2px; }
+.dict-context {
+  margin-top: 14px;
+  padding-top: 12px;
+  border-top: 1px solid #243552;
+  font-size: 0.88rem;
+}
+.dict-context strong { color: var(--accent2); }
+.dict-context .ctx-zh { color: var(--muted); margin-top: 4px; }
+#btn-dict-save.saved { background: var(--accent2); color: #0f172a; }
 .dict-body .ex {
   color: #cbd5e1;
   font-size: 0.88rem;
+  margin-top: 6px;
 }
 
 .vocab-modes {

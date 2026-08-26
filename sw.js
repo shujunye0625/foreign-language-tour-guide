@@ -1,5 +1,5 @@
-/* Service Worker — shell + guides index + seed audio */
-const CACHE = "guide-oral-v3";
+/* Service Worker — shell + guides + lexicon */
+const CACHE = "guide-oral-v4";
 const PRECACHE = [
   "./",
   "./index.html",
@@ -11,6 +11,7 @@ const PRECACHE = [
   "./data/corpus.json",
   "./data/scenic_guides/index.json",
   "./data/phrase_patches.json",
+  "./data/lexicon/guide-lexicon.json",
 ];
 
 self.addEventListener("install", (event) => {
@@ -39,7 +40,8 @@ self.addEventListener("fetch", (event) => {
             (req.url.includes("/audio/") ||
               req.url.includes("corpus.json") ||
               req.url.includes("scenic_guides") ||
-              req.url.includes("phrase_patches"))
+              req.url.includes("phrase_patches") ||
+              req.url.includes("lexicon/"))
           ) {
             const clone = res.clone();
             caches.open(CACHE).then((c) => c.put(req, clone));

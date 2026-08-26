@@ -21,15 +21,21 @@
         <p class="sub">先啃五景点讲解 · 广东口试核心</p>
       </header>
 
-      <div class="today-card" id="continue-card">
-        <div class="today-row">
-          <span>今日听 / 跟</span>
-          <strong id="today-goal">听 0 · 跟 0</strong>
+      <section class="today-stats" id="today-stats" aria-label="今日学习">
+        <div class="stat">
+          <strong id="stat-sentences">0</strong>
+          <span>今日学了（句）</span>
         </div>
-        <div class="bar"><i id="today-bar"></i></div>
-        <button type="button" class="btn continue hidden" id="btn-continue">继续上次</button>
-        <p class="hint" id="continue-hint">打开任一景点，逐句听跟</p>
-      </div>
+        <div class="stat">
+          <strong id="stat-plays">0</strong>
+          <span>今日听了（遍）</span>
+        </div>
+        <div class="stat">
+          <strong id="stat-saved">0</strong>
+          <span>今日新收藏</span>
+        </div>
+      </section>
+      <p class="today-hint" id="today-hint">点开任一模块，听一句就算开工</p>
 
       <section class="home-block">
         <div class="block-head">
@@ -51,7 +57,8 @@
       </section>
 
       <div class="home-actions">
-        <button type="button" class="btn ghost" id="btn-vocab">主动词汇本</button>
+        <button type="button" class="btn ghost" id="btn-wordbook">我的生词本</button>
+        <button type="button" class="btn ghost" id="btn-vocab">主动词汇</button>
         <button type="button" class="btn ghost" id="btn-weak">弱项词本</button>
         <button type="button" class="btn ghost" id="btn-install-help">如何添加到主屏幕</button>
       </div>
@@ -204,6 +211,16 @@
         <button type="button" class="chip" id="btn-vocab-next">下一张</button>
         <button type="button" class="chip" id="btn-vocab-weak">标为弱项</button>
       </div>
+    </section>
+
+    <section id="view-wordbook" class="view">
+      <header class="top compact">
+        <button type="button" class="icon-btn" id="btn-back-wordbook">←</button>
+        <h2>我的生词本</h2>
+        <span></span>
+      </header>
+      <ul class="wordbook-ul" id="wordbook-ul"></ul>
+      <p class="empty" id="wordbook-empty">还没有收藏。阅读时点词 → 收藏，会出现在这里。</p>
     </section>
 
     <section id="view-weak" class="view">

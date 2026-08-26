@@ -4,7 +4,6 @@
 
 const SPEEDS = [0.8, 1.0, 1.1];
 const STORAGE_KEY = "guide-oral-v2";
-const DAILY_LISTEN_GOAL = 40;
 const IDB_NAME = "guide-dict-v1";
 const IDB_STORE = "entries";
 
@@ -22,6 +21,9 @@ const $ = (id) => document.getElementById(id);
 let corpus = { sentences: [] };
 let guidesIndex = { spots: [] };
 let phrasePatches = {};
+let guideLexicon = {};
+let lexiconIndex = {};
+let lexiconPhrases = [];
 let state = loadState();
 
 /** Guide reader */
@@ -34,6 +36,8 @@ let gPlaying = false;
 let gRecorder = null;
 let gMeUrl = null;
 let dictTerm = "";
+let dictSnapshot = null;
+let dictContext = null;
 
 /** Bank player */
 let queue = [];
@@ -60,6 +64,8 @@ function defaultState() {
   return {
     today: todayKey(),
     todayListen: 0,
+    todaySentenceIds: [],
+    todaySavedNew: 0,
     todayShadow: 0,
     progress: {},
     weakWords: {},
@@ -68,21 +74,51 @@ function defaultState() {
   };
 }
 
+function migrateState(s) {
+  if (!Array.isArray(s.todaySentenceIds)) s.todaySentenceIds = [];
+  if (typeof s.todaySavedNew !== "number") s.todaySavedNew = 0;
+  if (Array.isArray(s.savedDict) && s.savedDict.length && typeof s.savedDict[0] === "string") {
+    s.savedDict = s.savedDict.map((term) => ({
+      term,
+      savedAt: s.today || todayKey(),
+      snapshot: null,
+    }));
+  }
+  return s;
+}
+
 function loadState() {
   try {
-    return { ...defaultState(), ...JSON.parse(localStorage.getItem(STORAGE_KEY) || "{}") };
+    return migrateState({ ...defaultState(), ...JSON.parse(localStorage.getItem(STORAGE_KEY) || "{}") });
   } catch {
     return defaultState();
   }
 }
 
-function saveState() {
+function ensureToday() {
   if (state.today !== todayKey()) {
     state.today = todayKey();
     state.todayListen = 0;
+    state.todaySentenceIds = [];
+    state.todaySavedNew = 0;
     state.todayShadow = 0;
   }
+}
+
+function saveState() {
+  ensureToday();
   localStorage.setItem(STORAGE_KEY, JSON.stringify(state));
+}
+
+function recordListen(sentenceId) {
+  if (!sentenceId) return;
+  ensureToday();
+  prog(sentenceId).listen += 1;
+  state.todayListen += 1;
+  if (!state.todaySentenceIds.includes(sentenceId)) {
+    state.todaySentenceIds.push(sentenceId);
+  }
+  saveState();
 }
 
 function prog(id) {
@@ -142,25 +178,15 @@ function spotStats(spotId, n) {
 }
 
 function renderHome() {
-  if (state.today !== todayKey()) {
-    state.today = todayKey();
-    state.todayListen = 0;
-    state.todayShadow = 0;
-    saveState();
-  }
-  $("today-goal").textContent = `听 ${state.todayListen} · 跟 ${state.todayShadow}`;
-  $("today-bar").style.width = `${Math.min(100, (state.todayListen / DAILY_LISTEN_GOAL) * 100)}%`;
-
-  if (state.lastGuide?.spotId) {
-    const meta = guidesIndex.spots.find((s) => s.id === state.lastGuide.spotId);
-    $("btn-continue").classList.remove("hidden");
-    $("continue-hint").textContent = meta
-      ? `上次：${meta.titleZh} · 第 ${(state.lastGuide.index || 0) + 1} 句`
-      : "继续上次讲解";
-  } else {
-    $("btn-continue").classList.add("hidden");
-    $("continue-hint").textContent = "打开任一景点，逐句听跟";
-  }
+  ensureToday();
+  const sentences = state.todaySentenceIds.length;
+  const plays = state.todayListen;
+  const saved = state.todaySavedNew;
+  $("stat-sentences").textContent = String(sentences);
+  $("stat-plays").textContent = String(plays);
+  $("stat-saved").textContent = String(saved);
+  const hint = $("today-hint");
+  if (hint) hint.classList.toggle("hidden", sentences + plays + saved > 0);
 
   const list = $("spot-list");
   list.innerHTML = "";
@@ -255,7 +281,9 @@ function renderGuideReader() {
     }
     const en = document.createElement("p");
     en.className = "en";
-    en.appendChild(tokenize(s.en, s.focusPhrases || []));
+    const ctx = { sentenceId: s.id, en: s.en, zh: s.zh };
+    const phrases = [...new Set([...(s.focusPhrases || []), ...lexiconPhrases])];
+    en.appendChild(tokenize(s.en, phrases, ctx));
     const zh = document.createElement("p");
     zh.className = "zh";
     zh.textContent = s.zh || "";
@@ -274,13 +302,13 @@ function renderGuideReader() {
   });
 }
 
-function tokenize(text, phrases) {
+function tokenize(text, phrases, ctx) {
   const frag = document.createDocumentFragment();
   const sorted = [...phrases].filter(Boolean).sort((a, b) => b.length - a.length);
   let rest = text;
   const pushPlain = (chunk) => {
     chunk.split(/(\s+|[,.;:!?"""''—–-])/).filter(Boolean).forEach((tok) => {
-      if (/^[A-Za-z][A-Za-z'-]*$/.test(tok)) frag.appendChild(wordSpan(tok));
+      if (/^[A-Za-z][A-Za-z'-]*$/.test(tok)) frag.appendChild(wordSpan(tok, ctx));
       else frag.appendChild(document.createTextNode(tok));
     });
   };
@@ -299,19 +327,19 @@ function tokenize(text, phrases) {
       break;
     }
     if (at > 0) pushPlain(rest.slice(0, at));
-    frag.appendChild(wordSpan(hit));
+    frag.appendChild(wordSpan(hit, ctx));
     rest = rest.slice(at + hit.length);
   }
   return frag;
 }
 
-function wordSpan(text) {
+function wordSpan(text, ctx) {
   const span = document.createElement("span");
   span.className = "word";
   span.textContent = text;
   span.onclick = (e) => {
     e.stopPropagation();
-    openDict(text.trim());
+    openDict(text.trim(), ctx);
   };
   return span;
 }
@@ -422,9 +450,7 @@ async function playGuide() {
 function onGuideEnded() {
   const s = curGuide();
   if (s) {
-    prog(s.id).listen += 1;
-    state.todayListen += 1;
-    saveState();
+    recordListen(s.id);
     updateGuideChrome();
     renderHome();
   }
@@ -549,6 +575,58 @@ function closeStops() {
 
 /* ── Dictionary ── */
 
+function buildLexiconIndex(lex) {
+  const idx = {};
+  for (const [key, entry] of Object.entries(lex)) {
+    if (key === "_meta") continue;
+    idx[key.toLowerCase()] = key;
+    for (const f of entry.forms || []) idx[f.toLowerCase()] = key;
+  }
+  return idx;
+}
+
+function lookupLexicon(term) {
+  if (!term) return null;
+  if (guideLexicon[term]) return { key: term, entry: guideLexicon[term] };
+  const low = term.toLowerCase();
+  const key = lexiconIndex[low];
+  if (key && guideLexicon[key]) return { key, entry: guideLexicon[key] };
+  return null;
+}
+
+function formatZh(zh) {
+  return (zh || "").replace(/\\n/g, " · ").trim();
+}
+
+function glossFromEntry(entry) {
+  const s = entry?.senses?.[0];
+  if (!s) return "";
+  return formatZh(s.zh) || s.enDef || "";
+}
+
+function savedItem(raw) {
+  if (typeof raw === "string") return { term: raw, savedAt: "", snapshot: null };
+  return raw;
+}
+
+function findSaved(term) {
+  const t = term.toLowerCase();
+  return state.savedDict.find((x) => savedItem(x).term.toLowerCase() === t) || null;
+}
+
+function isDictSaved(term) {
+  return !!findSaved(term);
+}
+
+function updateDictSaveBtn() {
+  const btn = $("btn-dict-save");
+  if (!btn) return;
+  const saved = dictTerm && isDictSaved(dictTerm);
+  btn.textContent = saved ? "已收藏 ✓" : "收藏";
+  btn.classList.toggle("saved", saved);
+  btn.disabled = !dictSnapshot;
+}
+
 function idbOpen() {
   return new Promise((resolve, reject) => {
     const req = indexedDB.open(IDB_NAME, 1);
@@ -608,58 +686,106 @@ function normalizeDict(entry) {
   return { phonetic, audio, meanings: meanings.slice(0, 8) };
 }
 
+function renderLexicon(term, hit) {
+  const { entry } = hit;
+  $("dict-ipa").textContent = entry.ipa || "";
+  const html = (entry.senses || []).map((s, i) => {
+    const zh = formatZh(s.zh);
+    const parts = [`<div class="sense-block"><p class="sense-zh">${zh || "—"}</p>`];
+    if (s.enDef) parts.push(`<p class="sense-en">${s.enDef.replace(/\\n/g, "<br>")}</p>`);
+    if (s.exampleEn) {
+      parts.push(`<div class="ex">e.g. ${s.exampleEn}</div>`);
+      if (s.exampleZh) parts.push(`<div class="ex ctx-zh">${s.exampleZh}</div>`);
+    }
+    parts.push("</div>");
+    return `<h4>${entry.type === "phrase" ? "词组" : (entry.pos || `义项 ${i + 1}`)}</h4>${parts.join("")}`;
+  }).join("");
+  $("dict-body").innerHTML = html || "<p>无释义</p>";
+  dictTerm = term;
+  dictSnapshot = { ipa: entry.ipa || "", senses: entry.senses || [], type: entry.type || "word" };
+  delete $("dict-body").dataset.audio;
+  appendDictContext();
+  updateDictSaveBtn();
+}
+
+function appendDictContext() {
+  if (!dictContext?.zh) return;
+  $("dict-body").insertAdjacentHTML("beforeend", `
+    <div class="dict-context">
+      <strong>本句语境</strong>
+      <p>${dictContext.en || ""}</p>
+      <p class="ctx-zh">${dictContext.zh}</p>
+    </div>`);
+}
+
 function renderPatch(term, patch) {
   $("dict-ipa").textContent = patch.ipa || "";
-  const senses = (patch.senses || []).map((s) => `<li>${s}</li>`).join("");
-  $("dict-body").innerHTML = `<p><strong>${patch.gloss || ""}</strong></p>
-    <h4>义项</h4><ul>${senses || "<li>—</li>"}</ul>
-    <p class="ex">导游术语本地补丁</p>`;
-  dictTerm = term;
-  delete $("dict-body").dataset.audio;
+  const senses = (patch.senses || []).map((s) => {
+    if (typeof s === "object") return s;
+    return { zh: patch.gloss || "", enDef: String(s) };
+  });
+  if (!senses.length && patch.gloss) senses.push({ zh: patch.gloss, enDef: "" });
+  renderLexicon(term, { entry: { ipa: patch.ipa, senses, type: "phrase" } });
+  $("dict-body").querySelector(".dict-context")?.remove();
+  appendDictContext();
 }
 
-function renderDict(term, payload) {
+function renderDictLegacy(term, payload) {
   $("dict-ipa").textContent = payload.phonetic || "";
-  $("dict-body").innerHTML = (payload.meanings || []).map((m) => `
-    <h4>${m.pos || "sense"}</h4>
-    <ul><li>${m.def}${m.example ? `<div class="ex">e.g. ${m.example}</div>` : ""}</li></ul>
-  `).join("") || "<p>无释义</p>";
-  dictTerm = term;
+  const senses = (payload.meanings || []).map((m) => ({
+    zh: m.def,
+    enDef: "",
+    exampleEn: m.example || "",
+  }));
+  renderLexicon(term, { entry: { ipa: payload.phonetic, senses, type: "word" } });
   if (payload.audio) $("dict-body").dataset.audio = payload.audio;
-  else delete $("dict-body").dataset.audio;
 }
 
-async function openDict(term) {
-  dictTerm = term.replace(/^[^A-Za-z]+|[^A-Za-z']+$/g, "");
+async function openDict(term, ctx) {
+  dictContext = ctx || null;
+  dictTerm = term.replace(/^[^A-Za-z0-9]+|[^A-Za-z0-9']+$/g, "").trim();
   if (!dictTerm) return;
   $("dict-word").textContent = dictTerm;
-  $("dict-ipa").textContent = "加载中…";
-  $("dict-body").innerHTML = "";
+  $("dict-ipa").textContent = "";
+  $("dict-body").innerHTML = "<p>加载中…</p>";
   $("dict-sheet").classList.remove("hidden");
+  dictSnapshot = null;
+  updateDictSaveBtn();
 
   const patch = findPatch(dictTerm);
   if (patch) {
     renderPatch(dictTerm, patch);
     return;
   }
-  const cached = await idbGet(dictTerm.toLowerCase());
-  if (cached) {
-    renderDict(dictTerm, cached);
+
+  const hit = lookupLexicon(dictTerm);
+  if (hit?.entry?.senses?.length) {
+    renderLexicon(dictTerm, hit);
     return;
   }
-  try {
-    const res = await fetch(
-      `https://api.dictionaryapi.dev/api/v2/entries/en/${encodeURIComponent(dictTerm.toLowerCase())}`
-    );
-    if (!res.ok) throw new Error("nf");
-    const data = await res.json();
-    const payload = normalizeDict(Array.isArray(data) ? data[0] : data);
-    await idbSet(dictTerm.toLowerCase(), payload);
-    renderDict(dictTerm, payload);
-  } catch {
-    $("dict-ipa").textContent = "";
-    $("dict-body").innerHTML = "<p>未找到释义。可收藏后结合本句中文理解。</p>";
+
+  const cached = await idbGet(dictTerm.toLowerCase());
+  if (cached?.meanings?.length) {
+    renderDictLegacy(dictTerm, cached);
+    return;
   }
+
+  if (dictContext?.zh) {
+    $("dict-ipa").textContent = "";
+    $("dict-body").innerHTML = `<p>离线词库暂无该词条。</p>`;
+    dictSnapshot = {
+      ipa: "",
+      senses: [{ zh: dictContext.zh, enDef: "", exampleEn: dictContext.en, exampleZh: dictContext.zh }],
+      type: "word",
+    };
+    appendDictContext();
+    updateDictSaveBtn();
+    return;
+  }
+
+  $("dict-body").innerHTML = "<p>未找到释义。请在有中文讲解的句子里点词。</p>";
+  dictSnapshot = null;
+  updateDictSaveBtn();
 }
 
 function closeDict() {
@@ -678,13 +804,27 @@ function speakDict() {
 }
 
 function saveDictTerm() {
-  if (!dictTerm) return;
-  if (!state.savedDict.includes(dictTerm)) state.savedDict.push(dictTerm);
-  const k = dictTerm.toLowerCase();
-  state.weakWords[k] = (state.weakWords[k] || 0) + 1;
+  if (!dictTerm || !dictSnapshot) return;
+  ensureToday();
+  const existing = findSaved(dictTerm);
+  if (existing) {
+    state.savedDict = state.savedDict.filter((x) => savedItem(x).term.toLowerCase() !== dictTerm.toLowerCase());
+    saveState();
+    updateDictSaveBtn();
+    renderHome();
+    return;
+  }
+  state.savedDict.push({
+    term: dictTerm,
+    savedAt: todayKey(),
+    fromSentenceId: dictContext?.sentenceId || "",
+    snapshot: dictSnapshot,
+  });
+  state.weakWords[dictTerm.toLowerCase()] = (state.weakWords[dictTerm.toLowerCase()] || 0) + 1;
+  state.todaySavedNew += 1;
   saveState();
-  $("btn-dict-save").textContent = "已收藏";
-  setTimeout(() => { $("btn-dict-save").textContent = "收藏"; }, 1000);
+  updateDictSaveBtn();
+  renderHome();
 }
 
 /* ── Bank player ── */
@@ -757,10 +897,9 @@ async function playPlayer() {
 function onPlayerEnded() {
   const s = curQ();
   if (s) {
-    prog(s.id).listen += 1;
-    state.todayListen += 1;
-    saveState();
+    recordListen(s.id);
     renderPlayer();
+    renderHome();
   }
   if (qLoop) {
     playPlayer();
@@ -835,20 +974,49 @@ async function togglePlayerRecord() {
 
 function buildVocabDeck() {
   const items = [];
-  for (const term of state.savedDict) {
-    const patch = findPatch(term);
-    items.push({ en: term, zh: patch?.gloss || "（已收藏）" });
+  for (const raw of state.savedDict) {
+    const item = savedItem(raw);
+    const snap = item.snapshot;
+    const zh = snap?.senses?.[0]?.zh
+      ? formatZh(snap.senses[0].zh)
+      : (findPatch(item.term)?.gloss || glossFromEntry(lookupLexicon(item.term)?.entry) || "（已收藏）");
+    items.push({ en: item.term, zh });
   }
   for (const [w, c] of Object.entries(state.weakWords)) {
     if (items.some((x) => x.en.toLowerCase() === w)) continue;
-    items.push({ en: w, zh: `弱项 ×${c}` });
+    const hit = lookupLexicon(w);
+    items.push({ en: w, zh: hit ? glossFromEntry(hit.entry) : `弱项 ×${c}` });
   }
   for (const [en, patch] of Object.entries(phrasePatches)) {
     if (items.length >= 48) break;
-    if (items.some((x) => x.en === en)) continue;
+    if (items.some((x) => x.en.toLowerCase() === en.toLowerCase())) continue;
     items.push({ en, zh: patch.gloss || (patch.senses || [])[0] || "" });
   }
   return items.length ? items : [{ en: "Danxia Landform", zh: "丹霞地貌" }];
+}
+
+function renderWordbook() {
+  const ul = $("wordbook-ul");
+  ul.innerHTML = "";
+  const items = [...state.savedDict].reverse().map(savedItem);
+  $("wordbook-empty").style.display = items.length ? "none" : "block";
+  for (const item of items) {
+    const li = document.createElement("li");
+    const snap = item.snapshot;
+    const gloss = snap?.senses?.[0]?.zh
+      ? formatZh(snap.senses[0].zh)
+      : (findPatch(item.term)?.gloss || glossFromEntry(lookupLexicon(item.term)?.entry) || "—");
+    li.innerHTML = `<strong>${item.term}</strong>
+      <div class="gloss">${gloss}</div>
+      ${item.savedAt ? `<div class="meta">收藏于 ${item.savedAt}</div>` : ""}`;
+    li.onclick = () => openDict(item.term, item.fromSentenceId ? { sentenceId: item.fromSentenceId } : null);
+    ul.appendChild(li);
+  }
+}
+
+function openWordbook() {
+  renderWordbook();
+  showView("wordbook");
 }
 
 function openVocab() {
@@ -891,18 +1059,17 @@ function renderWeak() {
 /* ── Bind / boot ── */
 
 function bind() {
-  $("btn-continue").onclick = () => {
-    if (state.lastGuide?.spotId) openGuide(state.lastGuide.spotId, state.lastGuide.index);
-  };
   $("btn-bank-toggle").onclick = () => {
     const grid = $("module-grid");
     const collapsed = grid.classList.toggle("collapsed");
     $("btn-bank-toggle").classList.toggle("open", !collapsed);
     $("btn-bank-toggle").setAttribute("aria-expanded", collapsed ? "false" : "true");
   };
+  $("btn-wordbook").onclick = () => openWordbook();
   $("btn-vocab").onclick = () => openVocab();
   $("btn-weak").onclick = () => { renderWeak(); showView("weak"); };
   $("btn-install-help").onclick = () => showView("install");
+  $("btn-back-wordbook").onclick = () => showView("home");
 
   $("btn-guide-back").onclick = () => { stopAudio(); showView("home"); renderHome(); };
   $("btn-guide-menu").onclick = () => openStops();
@@ -992,14 +1159,22 @@ function bind() {
 }
 
 async function loadData() {
-  const [cRes, gRes, pRes] = await Promise.all([
+  const [cRes, gRes, pRes, lRes] = await Promise.all([
     fetch("./data/corpus.json"),
     fetch("./data/scenic_guides/index.json"),
     fetch("./data/phrase_patches.json"),
+    fetch("./data/lexicon/guide-lexicon.json"),
   ]);
   corpus = await cRes.json();
   guidesIndex = await gRes.json();
   if (pRes.ok) phrasePatches = await pRes.json();
+  if (lRes.ok) {
+    guideLexicon = await lRes.json();
+    lexiconIndex = buildLexiconIndex(guideLexicon);
+    lexiconPhrases = Object.keys(guideLexicon).filter(
+      (k) => k !== "_meta" && guideLexicon[k].type === "phrase"
+    );
+  }
 }
 
 async function registerSW() {

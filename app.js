@@ -1,6 +1,10 @@
-/**
+﻿/**
  * 导游英语口语 PWA — 五景点讲解为主线（单文件模块）
  */
+
+import { ENABLE_USER_GUIDES } from "./app/config.js";
+import { initUserGuideUI, renderUserGuides, toast, resumeBackgroundTts } from "./app/user-guide-ui.js";
+import { loadOfficialGuide, loadUserGuide } from "./app/guide-loader.js";
 
 const SPEEDS = [0.8, 1.0, 1.1];
 const STORAGE_KEY = "guide-oral-v2";
@@ -39,6 +43,15 @@ let dictTerm = "";
 let dictSnapshot = null;
 let dictContext = null;
 
+/** User guides */
+let guideMode = "official";
+let guideLoaderHandle = null;
+let activeTtsGuideId = null;
+let draftTemplate = "en_zh_lines";
+let draftSentences = [];
+let userGuideEntered = false;
+let userSystemPlayNotified = false;
+
 /** Bank player */
 let queue = [];
 let qIdx = 0;
@@ -48,11 +61,6 @@ let showZh = true;
 let qRecorder = null;
 let qRecording = false;
 let qMeUrl = null;
-
-/** Vocab */
-let vocabDeck = [];
-let vocabIdx = 0;
-let vocabMode = "en2zh";
 
 /* ── Persistence ── */
 
@@ -71,12 +79,14 @@ function defaultState() {
     weakWords: {},
     savedDict: [],
     lastGuide: null,
+    lastUserGuide: null,
   };
 }
 
 function migrateState(s) {
   if (!Array.isArray(s.todaySentenceIds)) s.todaySentenceIds = [];
   if (typeof s.todaySavedNew !== "number") s.todaySavedNew = 0;
+  if (!s.lastUserGuide) s.lastUserGuide = null;
   if (Array.isArray(s.savedDict) && s.savedDict.length && typeof s.savedDict[0] === "string") {
     s.savedDict = s.savedDict.map((term) => ({
       term,
@@ -225,16 +235,23 @@ function renderHome() {
     );
     grid.appendChild(btn);
   }
+  if (ENABLE_USER_GUIDES) renderUserGuides();
 }
 
 /* ── Guide reader ── */
 
 async function openGuide(spotId, resumeIndex) {
+  return openOfficialGuide(spotId, resumeIndex);
+}
+
+async function openOfficialGuide(spotId, resumeIndex) {
+  disposeGuideLoader();
   stopAudio();
-  const meta = guidesIndex.spots.find((s) => s.id === spotId);
-  if (!meta) return;
-  const res = await fetch(`./data/scenic_guides/${meta.file}`);
-  guide = await res.json();
+  const loaded = await loadOfficialGuide(spotId, guidesIndex);
+  if (!loaded) return;
+  guideLoaderHandle = loaded;
+  guideMode = "official";
+  guide = loaded.guide;
   if (typeof resumeIndex === "number") {
     gIdx = Math.min(Math.max(0, resumeIndex), guide.sentences.length - 1);
   } else if (state.lastGuide?.spotId === spotId) {
@@ -242,6 +259,42 @@ async function openGuide(spotId, resumeIndex) {
   } else {
     gIdx = 0;
   }
+  setupGuideReader();
+  state.lastGuide = { spotId: guide.id, index: gIdx };
+  saveState();
+}
+
+async function openUserGuide(guideId, resumeIndex) {
+  disposeGuideLoader();
+  stopAudio();
+  const loaded = await loadUserGuide(guideId);
+  if (!loaded) {
+    alert("找不到该稿子，可能已被删除。");
+    return;
+  }
+  guideLoaderHandle = loaded;
+  guideMode = "user";
+  guide = loaded.guide;
+  if (typeof resumeIndex === "number") {
+    gIdx = Math.min(Math.max(0, resumeIndex), guide.sentences.length - 1);
+  } else if (state.lastUserGuide?.guideId === guideId) {
+    gIdx = Math.min(state.lastUserGuide.index || 0, guide.sentences.length - 1);
+  } else {
+    gIdx = 0;
+  }
+  setupGuideReader();
+  state.lastUserGuide = { guideId: guide.id, index: gIdx };
+  saveState();
+  userSystemPlayNotified = false;
+  resumeBackgroundTts(guideId);
+}
+
+function disposeGuideLoader() {
+  if (guideLoaderHandle?.dispose) guideLoaderHandle.dispose();
+  guideLoaderHandle = null;
+}
+
+function setupGuideReader() {
   gMode = "drill";
   gLoop = true;
   gMeUrl = null;
@@ -250,14 +303,27 @@ async function openGuide(spotId, resumeIndex) {
   $("btn-guide-loop").classList.add("on");
   $("btn-guide-replay-me").classList.add("hidden");
   $("guide-title").textContent = guide.titleZh;
-  $("guide-sub").textContent = guide.titleEn;
+  $("guide-sub").textContent = guide.titleEn || "";
+  $("btn-guide-menu").classList.toggle("hidden", guideMode === "user");
+  $("anchor-card").classList.toggle("hidden", guideMode === "user");
+  updateUserTtsBar();
   renderGuideReader();
   highlightGuide(true);
   updateGuideChrome();
-  updateAnchor();
+  if (guideMode === "official") updateAnchor();
   showView("guide");
-  state.lastGuide = { spotId: guide.id, index: gIdx };
-  saveState();
+}
+
+function updateUserTtsBar() {
+  const bar = $("guide-tts-bar");
+  if (!bar) return;
+  if (guideMode !== "user" || !guide?._userMeta) {
+    bar.classList.add("hidden");
+    return;
+  }
+  bar.classList.remove("hidden");
+  const { ttsReadyCount = 0, sentenceCount = 0 } = guide._userMeta;
+  $("guide-tts-text").textContent = `范读 ${ttsReadyCount}/${sentenceCount}`;
 }
 
 function renderGuideReader() {
@@ -268,6 +334,7 @@ function renderGuideReader() {
   guide.sentences.forEach((s, i) => {
     const pair = document.createElement("div");
     pair.className = "pair";
+    if (guideMode === "user" && s.audioStatus === "pending") pair.classList.add("pending");
     pair.dataset.i = String(i);
     if (s.stopId !== lastStop) {
       lastStop = s.stopId;
@@ -363,6 +430,7 @@ function updateGuideChrome() {
   $("btn-guide-speed").textContent = `${SPEEDS[gSpeedIdx].toFixed(1)}x`;
   $("btn-guide-loop").classList.toggle("on", gLoop);
   $("btn-guide-replay-me").classList.toggle("hidden", !gMeUrl);
+  updateUserTtsBar();
 }
 
 function updateAnchor() {
@@ -383,7 +451,11 @@ function updateAnchor() {
 
 function persistGuide() {
   if (!guide) return;
-  state.lastGuide = { spotId: guide.id, index: gIdx };
+  if (guideMode === "user") {
+    state.lastUserGuide = { guideId: guide.id, index: gIdx };
+  } else {
+    state.lastGuide = { spotId: guide.id, index: gIdx };
+  }
   saveState();
 }
 
@@ -437,11 +509,21 @@ function speak(text, rate, onEnded) {
 async function playGuide() {
   const s = curGuide();
   if (!s) return;
+  if (guideMode === "user" && s.audioStatus === "pending") {
+    toast("这句还在准备范读，请稍候…");
+    return;
+  }
   stopAudio();
   const a = audioEl();
   let ok = false;
   if (s.audio) ok = await tryPlay(a, s.audio, SPEEDS[gSpeedIdx], onGuideEnded);
-  if (!ok) speak(s.en, SPEEDS[gSpeedIdx], onGuideEnded);
+  if (!ok) {
+    if (guideMode === "user" && s.audioStatus === "system" && !userSystemPlayNotified) {
+      toast("高清范读不可用，已用系统朗读");
+      userSystemPlayNotified = true;
+    }
+    speak(s.en, SPEEDS[gSpeedIdx], onGuideEnded);
+  }
   gPlaying = true;
   $("btn-guide-play").textContent = "⏸";
   $("btn-guide-play").classList.add("playing");
@@ -820,7 +902,6 @@ function saveDictTerm() {
     fromSentenceId: dictContext?.sentenceId || "",
     snapshot: dictSnapshot,
   });
-  state.weakWords[dictTerm.toLowerCase()] = (state.weakWords[dictTerm.toLowerCase()] || 0) + 1;
   state.todaySavedNew += 1;
   saveState();
   updateDictSaveBtn();
@@ -970,92 +1051,6 @@ async function togglePlayerRecord() {
   }
 }
 
-/* ── Vocab ── */
-
-function buildVocabDeck() {
-  const items = [];
-  for (const raw of state.savedDict) {
-    const item = savedItem(raw);
-    const snap = item.snapshot;
-    const zh = snap?.senses?.[0]?.zh
-      ? formatZh(snap.senses[0].zh)
-      : (findPatch(item.term)?.gloss || glossFromEntry(lookupLexicon(item.term)?.entry) || "（已收藏）");
-    items.push({ en: item.term, zh });
-  }
-  for (const [w, c] of Object.entries(state.weakWords)) {
-    if (items.some((x) => x.en.toLowerCase() === w)) continue;
-    const hit = lookupLexicon(w);
-    items.push({ en: w, zh: hit ? glossFromEntry(hit.entry) : `弱项 ×${c}` });
-  }
-  for (const [en, patch] of Object.entries(phrasePatches)) {
-    if (items.length >= 48) break;
-    if (items.some((x) => x.en.toLowerCase() === en.toLowerCase())) continue;
-    items.push({ en, zh: patch.gloss || (patch.senses || [])[0] || "" });
-  }
-  return items.length ? items : [{ en: "Danxia Landform", zh: "丹霞地貌" }];
-}
-
-function renderWordbook() {
-  const ul = $("wordbook-ul");
-  ul.innerHTML = "";
-  const items = [...state.savedDict].reverse().map(savedItem);
-  $("wordbook-empty").style.display = items.length ? "none" : "block";
-  for (const item of items) {
-    const li = document.createElement("li");
-    const snap = item.snapshot;
-    const gloss = snap?.senses?.[0]?.zh
-      ? formatZh(snap.senses[0].zh)
-      : (findPatch(item.term)?.gloss || glossFromEntry(lookupLexicon(item.term)?.entry) || "—");
-    li.innerHTML = `<strong>${item.term}</strong>
-      <div class="gloss">${gloss}</div>
-      ${item.savedAt ? `<div class="meta">收藏于 ${item.savedAt}</div>` : ""}`;
-    li.onclick = () => openDict(item.term, item.fromSentenceId ? { sentenceId: item.fromSentenceId } : null);
-    ul.appendChild(li);
-  }
-}
-
-function openWordbook() {
-  renderWordbook();
-  showView("wordbook");
-}
-
-function openVocab() {
-  vocabDeck = buildVocabDeck();
-  vocabIdx = 0;
-  vocabMode = "en2zh";
-  showView("vocab");
-  renderVocab(false);
-}
-
-function renderVocab(reveal) {
-  const card = vocabDeck[vocabIdx % vocabDeck.length];
-  if (!card) return;
-  if (vocabMode === "en2zh") {
-    $("vocab-front").textContent = card.en;
-    $("vocab-back").textContent = card.zh;
-  } else if (vocabMode === "zh2en") {
-    $("vocab-front").textContent = card.zh;
-    $("vocab-back").textContent = card.en;
-  } else {
-    $("vocab-front").textContent = "（遮句）请口头复述英文，再显示对照";
-    $("vocab-back").textContent = `${card.en}\n${card.zh}`;
-  }
-  $("vocab-back").classList.toggle("hidden", !reveal);
-}
-
-function renderWeak() {
-  const entries = Object.entries(state.weakWords).sort((a, b) => b[1] - a[1]);
-  const ul = $("weak-ul");
-  ul.innerHTML = "";
-  $("weak-empty").style.display = entries.length ? "none" : "block";
-  for (const [w, c] of entries.slice(0, 80)) {
-    const li = document.createElement("li");
-    li.innerHTML = `<span>${w}</span><span class="count">×${c}</span>`;
-    li.onclick = () => openDict(w);
-    ul.appendChild(li);
-  }
-}
-
 /* ── Bind / boot ── */
 
 function bind() {
@@ -1066,12 +1061,10 @@ function bind() {
     $("btn-bank-toggle").setAttribute("aria-expanded", collapsed ? "false" : "true");
   };
   $("btn-wordbook").onclick = () => openWordbook();
-  $("btn-vocab").onclick = () => openVocab();
-  $("btn-weak").onclick = () => { renderWeak(); showView("weak"); };
   $("btn-install-help").onclick = () => showView("install");
   $("btn-back-wordbook").onclick = () => showView("home");
 
-  $("btn-guide-back").onclick = () => { stopAudio(); showView("home"); renderHome(); };
+  $("btn-guide-back").onclick = () => { stopAudio(); disposeGuideLoader(); guide = null; showView("home"); renderHome(); };
   $("btn-guide-menu").onclick = () => openStops();
   $("btn-stops-close").onclick = () => closeStops();
   $("stops-backdrop").onclick = () => closeStops();
@@ -1114,16 +1107,7 @@ function bind() {
   $("btn-dict-save").onclick = () => saveDictTerm();
 
   $("btn-back").onclick = () => { stopAudio(); showView("home"); renderHome(); };
-  $("btn-back-weak").onclick = () => showView("home");
   $("btn-back-install").onclick = () => showView("home");
-  $("btn-back-vocab").onclick = () => showView("home");
-  $("btn-clear-weak").onclick = () => {
-    if (confirm("清空弱项词本？")) {
-      state.weakWords = {};
-      saveState();
-      renderWeak();
-    }
-  };
   $("btn-toggle-zh").onclick = () => {
     showZh = !showZh;
     $("zh-text").classList.toggle("hidden", !showZh);
@@ -1141,21 +1125,28 @@ function bind() {
   $("btn-record").onclick = () => togglePlayerRecord();
   $("btn-pass").onclick = () => markPass();
 
-  $("btn-flash-en").onclick = () => { vocabMode = "en2zh"; renderVocab(false); };
-  $("btn-flash-zh").onclick = () => { vocabMode = "zh2en"; renderVocab(false); };
-  $("btn-cloak").onclick = () => { vocabMode = "cloak"; renderVocab(false); };
-  $("btn-vocab-reveal").onclick = () => renderVocab(true);
-  $("btn-vocab-next").onclick = () => {
-    vocabIdx = (vocabIdx + 1) % vocabDeck.length;
-    renderVocab(false);
-  };
-  $("btn-vocab-weak").onclick = () => {
-    const card = vocabDeck[vocabIdx % vocabDeck.length];
-    if (!card) return;
-    const k = card.en.toLowerCase();
-    state.weakWords[k] = (state.weakWords[k] || 0) + 1;
-    saveState();
-  };
+  initUserGuideUI({
+    $,
+    showView,
+    state,
+    saveState,
+    renderHome,
+    getGuideMode: () => guideMode,
+    getGuide: () => guide,
+    getGuideLoaderHandle: () => guideLoaderHandle,
+    getActiveTtsGuideId: () => activeTtsGuideId,
+    setActiveTtsGuideId: (id) => { activeTtsGuideId = id; },
+    getUserGuideEntered: () => userGuideEntered,
+    setUserGuideEntered: (v) => { userGuideEntered = v; },
+    getDraftTemplate: () => draftTemplate,
+    setDraftTemplate: (v) => { draftTemplate = v; },
+    getDraftSentences: () => draftSentences,
+    setDraftSentences: (v) => { draftSentences = v; },
+    openUserGuide,
+    updateUserTtsBar,
+    renderGuideReader,
+    highlightGuide,
+  });
 }
 
 async function loadData() {

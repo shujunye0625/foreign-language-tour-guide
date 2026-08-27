@@ -45,6 +45,23 @@
         <div class="spot-list" id="spot-list"></div>
       </section>
 
+      <section class="home-block" id="user-guides-block">
+        <div class="block-head row-head">
+          <div>
+            <h2>我的稿子</h2>
+            <p>自己的讲解词 · Jenny 范读 · 仅存本机</p>
+          </div>
+          <button type="button" class="btn small" id="btn-new-guide">+ 新建</button>
+        </div>
+        <div class="user-guide-list" id="user-guide-list"></div>
+        <p class="empty" id="user-guide-empty">把 Word 里的讲解词复制过来，几分钟就能听 Jenny 范读。</p>
+        <p class="storage-hint" id="storage-hint" aria-live="polite"></p>
+        <div class="user-guide-tools">
+          <button type="button" class="btn ghost small" id="btn-import-guide">从 JSON 导入</button>
+          <input type="file" id="import-guide-input" accept="application/json,.json" class="hidden-file" hidden />
+        </div>
+      </section>
+
       <section class="home-block bank-block">
         <button type="button" class="bank-toggle" id="btn-bank-toggle" aria-expanded="false">
           <span>
@@ -57,9 +74,7 @@
       </section>
 
       <div class="home-actions">
-        <button type="button" class="btn ghost" id="btn-wordbook">我的生词本</button>
-        <button type="button" class="btn ghost" id="btn-vocab">主动词汇</button>
-        <button type="button" class="btn ghost" id="btn-weak">弱项词本</button>
+        <button type="button" class="btn ghost" id="btn-wordbook">我的收藏词本</button>
         <button type="button" class="btn ghost" id="btn-install-help">如何添加到主屏幕</button>
       </div>
     </section>
@@ -84,6 +99,10 @@
           <span id="guide-pos">1 / 1</span>
           <span id="guide-ls">听 0 · 跟 0</span>
         </div>
+      </div>
+
+      <div class="tts-bar hidden" id="guide-tts-bar" aria-live="polite">
+        <span id="guide-tts-text">范读准备中 0/0</span>
       </div>
 
       <div class="anchor-card hidden" id="anchor-card">
@@ -189,49 +208,82 @@
       <p class="mic-hint" id="mic-hint">录音回听自查（不做纠音评分）</p>
     </section>
 
-    <!-- VOCAB DRILLS -->
-    <section id="view-vocab" class="view">
-      <header class="top compact">
-        <button type="button" class="icon-btn" id="btn-back-vocab">←</button>
-        <h2>主动词汇</h2>
-        <span></span>
-      </header>
-      <p class="hint pad">从讲解收藏与 Must-say 抽练：遮句复述 / 中英闪卡</p>
-      <div class="vocab-modes">
-        <button type="button" class="mod" id="btn-flash-en">英 → 中 闪卡</button>
-        <button type="button" class="mod" id="btn-flash-zh">中 → 英 闪卡</button>
-        <button type="button" class="mod" id="btn-cloak">遮句复述</button>
-      </div>
-      <article class="sentence-card vocab-card" id="vocab-card">
-        <p class="en" id="vocab-front">先点上方模式开始</p>
-        <p class="zh hidden" id="vocab-back"></p>
-      </article>
-      <div class="toolbar">
-        <button type="button" class="chip" id="btn-vocab-reveal">显示答案</button>
-        <button type="button" class="chip" id="btn-vocab-next">下一张</button>
-        <button type="button" class="chip" id="btn-vocab-weak">标为弱项</button>
-      </div>
-    </section>
-
     <section id="view-wordbook" class="view">
       <header class="top compact">
         <button type="button" class="icon-btn" id="btn-back-wordbook">←</button>
-        <h2>我的生词本</h2>
+        <h2>我的收藏词本</h2>
         <span></span>
       </header>
       <ul class="wordbook-ul" id="wordbook-ul"></ul>
       <p class="empty" id="wordbook-empty">还没有收藏。阅读时点词 → 收藏，会出现在这里。</p>
     </section>
 
-    <section id="view-weak" class="view">
+
+    <section id="view-paste-wizard" class="view">
       <header class="top compact">
-        <button type="button" class="icon-btn" id="btn-back-weak">←</button>
-        <h2>弱项词本</h2>
-        <button type="button" class="icon-btn" id="btn-clear-weak" title="清空">🗑</button>
+        <button type="button" class="icon-btn" id="btn-paste-back">←</button>
+        <h2>新建稿子</h2>
+        <span></span>
       </header>
-      <ul class="weak-ul" id="weak-ul"></ul>
-      <p class="empty" id="weak-empty">暂无弱项。查词收藏或闪卡「标为弱项」会出现在这里。</p>
+      <div class="wizard-body pad">
+        <label class="field">
+          <span>讲解标题（必填）</span>
+          <input type="text" id="paste-title" maxlength="40" placeholder="如：丹霞山·我的简版" />
+        </label>
+        <p class="hint">一篇最多 200 句 · 本机最多保存 100 篇 · 口试单篇建议 25–45 句</p>
+        <div class="template-pick" role="radiogroup" aria-label="粘贴模板">
+          <button type="button" class="tpl-card on" data-template="en_zh_lines" id="tpl-en-zh">
+            <strong>一句英一句中</strong>
+            <span>奇数行英文，偶数行中文（备考双语稿最常见）</span>
+          </button>
+          <button type="button" class="tpl-card" data-template="pure_en" id="tpl-pure-en">
+            <strong>纯英文</strong>
+            <span>按句号/换行自动拆句</span>
+          </button>
+        </div>
+        <details class="paste-example">
+          <summary>查看粘贴示例</summary>
+          <pre id="paste-example-text">Good morning, everyone.
+各位早上好。
+Welcome to Danxia Mountain.
+欢迎来到丹霞山。</pre>
+        </details>
+        <label class="field">
+          <span>粘贴讲解词</span>
+          <textarea id="paste-text" rows="10" placeholder="从 Word 复制后粘贴…"></textarea>
+        </label>
+        <div class="wizard-actions">
+          <button type="button" class="btn ghost" id="btn-paste-clipboard">从剪贴板粘贴</button>
+          <button type="button" class="btn" id="btn-paste-next">下一步：预览拆句</button>
+        </div>
+        <p class="privacy-hint">稿子与范读只存在本手机；合成时仅向服务器发送单句英文。国内网络不佳时自动用系统朗读，不影响练习。</p>
+      </div>
     </section>
+
+    <section id="view-paste-preview" class="view">
+      <header class="top compact">
+        <button type="button" class="icon-btn" id="btn-preview-back">←</button>
+        <h2>预览拆句</h2>
+        <span></span>
+      </header>
+      <div class="preview-head pad">
+        <p id="preview-stats" class="hint">共 0 句</p>
+        <p id="preview-warnings" class="warn hidden"></p>
+        <p id="preview-errors" class="err hidden"></p>
+      </div>
+      <ul class="preview-list" id="preview-list"></ul>
+      <div class="preview-dock pad">
+        <button type="button" class="btn ghost" id="btn-preview-add">+ 在末尾添加一句</button>
+        <button type="button" class="btn" id="btn-preview-save">保存并生成范读</button>
+      </div>
+    </section>
+
+    <div class="overlay hidden" id="tts-progress" aria-live="polite">
+      <div class="overlay-card">
+        <p id="tts-progress-text">正在准备范读…</p>
+        <div class="progress-bar"><div class="progress-fill" id="tts-progress-fill"></div></div>
+      </div>
+    </div>
 
     <section id="view-install" class="view">
       <header class="top compact">

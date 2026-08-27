@@ -1,10 +1,17 @@
-/* Service Worker — shell + guides + lexicon */
-const CACHE = "guide-oral-v4";
+﻿/* Service Worker — shell + guides + lexicon */
+const CACHE = "guide-oral-v6";
 const PRECACHE = [
   "./",
   "./index.html",
   "./styles.css",
   "./app.js",
+  "./app/config.js",
+  "./app/parse-paste.js",
+  "./app/user-guides.js",
+  "./app/tts-queue.js",
+  "./app/guide-loader.js",
+  "./app/user-guide-ui.js",
+  "./app/guide-backup.js",
   "./manifest.webmanifest",
   "./icons/icon-192.png",
   "./icons/icon-512.png",
@@ -53,3 +60,4 @@ self.addEventListener("fetch", (event) => {
     })
   );
 });
+

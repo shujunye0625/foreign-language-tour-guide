@@ -1,5 +1,5 @@
 ﻿/* Service Worker — shell + guides + lexicon */
-const CACHE = "guide-oral-v6";
+const CACHE = "guide-oral-v7";
 const PRECACHE = [
   "./",
   "./index.html",

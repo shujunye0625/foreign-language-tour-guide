@@ -42,9 +42,11 @@ Content-Type: application/json
 { "text": "Good morning.", "voice": "en-US-JennyNeural", "rate": "-5%" }
 
 200 → audio/mpeg
-400 → 空文本或超过 500 字符
+400 → 空文本或超过 1000 字符
 403 → Origin 不在白名单
 ```
+
+> 修改 `worker/tts.js` 中 `MAX_TEXT` 后必须重新 `wrangler deploy`，否则前端已放宽到 1000 时，旧 Worker 仍会拒收 501–1000 字句（范读会降级为系统朗读）。
 
 ## 本地测试
 
@@ -55,6 +57,16 @@ curl -X POST https://guide-tts.<account>.workers.dev/tts \
   -d "{\"text\":\"Good morning, everyone.\"}" \
   --output test.mp3
 ```
+
+验收硬上限（应 200 / 400）：
+
+```bash
+# 1000 字符 → 期望 200
+python -c "print('a'*1000)" > /tmp/t1000.txt
+# 或 PowerShell: ('a'*1000) | Set-Content ... 
+```
+
+将 1000 字与 1001 字分别作为 JSON `text` 字段 POST；1001 应返回 400。
 
 ## 说明
 

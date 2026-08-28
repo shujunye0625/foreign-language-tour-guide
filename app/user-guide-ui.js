@@ -4,9 +4,11 @@ import {
   validateSentences,
   mergeSentences,
   deleteSentence,
+  splitSentenceAt,
   warnNonAsciiInPureEn,
   MAX_SENTENCES,
-  WARN_SENTENCES,
+  MAX_EN_LEN,
+  WARN_EN_LEN,
 } from "./parse-paste.js";
 import {
   listGuides,
@@ -195,7 +197,13 @@ function onDraftEdit() {
   document.querySelectorAll(".preview-item").forEach((li, i) => {
     const en = li.querySelector(".en-edit")?.value ?? "";
     const zh = li.querySelector(".zh-edit")?.value ?? "";
-    if (sentences[i]) sentences[i] = { en: en.trim(), zh: zh.trim() };
+    if (sentences[i]) {
+      sentences[i] = {
+        en: en.trim(),
+        zh: zh.trim(),
+        softSplit: sentences[i].softSplit,
+      };
+    }
   });
   ux.setDraftSentences(sentences);
   renderPreview(false);
@@ -207,11 +215,15 @@ function renderPreview(scrollTop = true) {
   ul.innerHTML = "";
   const draftSentences = ux.getDraftSentences();
   draftSentences.forEach((s, i) => {
+    const enLen = (s.en || "").trim().length;
     const li = document.createElement("li");
     li.className = "preview-item";
+    if (enLen > MAX_EN_LEN) li.classList.add("is-error");
+    else if (enLen > WARN_EN_LEN) li.classList.add("is-warn");
+
     const num = document.createElement("div");
     num.className = "num";
-    num.textContent = `#${i + 1}`;
+    num.textContent = `#${i + 1} · ${enLen}/${MAX_EN_LEN} 字符`;
     li.appendChild(num);
 
     const enLabel = document.createElement("label");
@@ -220,7 +232,7 @@ function renderPreview(scrollTop = true) {
     const enTa = document.createElement("textarea");
     enTa.className = "en-edit";
     enTa.rows = 2;
-    enTa.maxLength = 500;
+    enTa.maxLength = MAX_EN_LEN;
     enTa.value = s.en || "";
     enLabel.appendChild(enTa);
     li.appendChild(enLabel);
@@ -237,6 +249,10 @@ function renderPreview(scrollTop = true) {
 
     const actions = document.createElement("div");
     actions.className = "preview-actions";
+    const splitBtn = document.createElement("button");
+    splitBtn.type = "button";
+    splitBtn.dataset.act = "split";
+    splitBtn.textContent = "拆开此句";
     const mergeBtn = document.createElement("button");
     mergeBtn.type = "button";
     mergeBtn.dataset.act = "merge";
@@ -245,13 +261,30 @@ function renderPreview(scrollTop = true) {
     delBtn.type = "button";
     delBtn.dataset.act = "del";
     delBtn.textContent = "删除";
+    actions.appendChild(splitBtn);
     actions.appendChild(mergeBtn);
     actions.appendChild(delBtn);
     li.appendChild(actions);
 
     enTa.addEventListener("input", onDraftEdit);
     zhTa.addEventListener("input", onDraftEdit);
+    splitBtn.onclick = () => {
+      onDraftEdit();
+      const before = ux.getDraftSentences().length;
+      const next = splitSentenceAt(ux.getDraftSentences(), i);
+      if (next.length <= before) {
+        toast("无法再拆开，请手动编辑或在句中加入标点");
+        return;
+      }
+      if (next.length > MAX_SENTENCES) {
+        toast(`拆开后将超过 ${MAX_SENTENCES} 句上限`);
+        return;
+      }
+      ux.setDraftSentences(next);
+      renderPreview();
+    };
     mergeBtn.onclick = () => {
+      onDraftEdit();
       ux.setDraftSentences(mergeSentences(ux.getDraftSentences(), i));
       renderPreview();
     };
@@ -262,7 +295,7 @@ function renderPreview(scrollTop = true) {
     ul.appendChild(li);
   });
   const n = draftSentences.length;
-  ux.$("preview-stats").textContent = `共 ${n} 句 · 最多 ${MAX_SENTENCES} 句 · 超过 ${WARN_SENTENCES} 句会提示较长`;
+  ux.$("preview-stats").textContent = `共 ${n} 句 · 最多 ${MAX_SENTENCES} 句 · 单句上限 ${MAX_EN_LEN} 字符 · 超过 ${WARN_EN_LEN} 提示偏长`;
   const v = validateSentences(draftSentences);
   const extra =
     ux.getDraftTemplate() === "pure_en" ? warnNonAsciiInPureEn(draftSentences) : [];

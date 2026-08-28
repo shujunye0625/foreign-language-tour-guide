@@ -6,7 +6,7 @@
 const TRUSTED_TOKEN = "6A5AA1D4EAFF4E9FB37E23D68491D6F4";
 const DEFAULT_VOICE = "en-US-JennyNeural";
 const DEFAULT_RATE = "-5%";
-const MAX_TEXT = 500;
+const MAX_TEXT = 1000;
 
 function corsHeaders(origin, allowed) {
   const h = {
